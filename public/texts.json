@@ -1,0 +1,23 @@
+
+// {
+//   "en": {
+//     "navbar": {
+//       "title": "WorkWave",
+//       "menu": {
+//         "home": "Home",
+//         "about": "About",
+//         "contact": "Contact"
+//       }
+//     }
+//   },
+//   "es": {
+//     "navbar": {
+//       "title": "WorkWave",
+//       "menu": {
+//         "home": "Inicio",
+//         "about": "Sobre nosotros",
+//         "contact": "Contacto"
+//       }
+//     }
+//   }
+// }
