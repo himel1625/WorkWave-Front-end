@@ -21,7 +21,7 @@ const Theme = () => {
   };
 
   return (
-    <div>
+    <div className='mt-2'>
       <button onClick={toggleTheme} className='' aria-label='Toggle Theme'>
         {theme === 'dark' ? (
           <RiSunLine className='w-6 h-6 text-white' />
