@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-
-import Navbar from '../Components/Navbar/Navbar';
+import { RiMoonClearLine, RiSunLine } from 'react-icons/ri';
 
 const Theme = () => {
   const [theme, setTheme] = useState(() => {
@@ -23,9 +22,13 @@ const Theme = () => {
 
   return (
     <div>
-      <div>
-        <Navbar theme={theme} toggleTheme={toggleTheme} />
-      </div>
+      <button onClick={toggleTheme} className='' aria-label='Toggle Theme'>
+        {theme === 'dark' ? (
+          <RiSunLine className='w-6 h-6 text-white' />
+        ) : (
+          <RiMoonClearLine className='w-6 h-6  text-black' />
+        )}
+      </button>
     </div>
   );
 };
