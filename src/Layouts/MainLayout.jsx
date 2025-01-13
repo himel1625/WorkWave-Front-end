@@ -8,7 +8,7 @@ const MainLayout = () => {
       <header>
         <Navbar />
       </header>
-      <div className='container mx-auto md:mx-auto scroll-smooth  min-h-[calc(100vh-68px)]   '>
+      <div className='container mx-auto md:mx-auto scroll-smooth  min-h-[calc(100vh-45px)]   '>
         <Outlet />
       </div>
       <footer>

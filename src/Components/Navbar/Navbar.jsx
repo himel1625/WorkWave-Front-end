@@ -8,7 +8,7 @@ import Theme from '../../Context/Theme';
 
 const Navbar = () => {
   return (
-    <div className='sticky top-0 z-50 '>
+    <div className='fixed w-full top-0 z-50 '>
       <div className='lg:px-12 bg-lightSecondary dark:bg-darkSecondary'>
         <Toolbar className='flex justify-between items-center px-4'>
           <div className='lg:hidden'>
