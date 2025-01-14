@@ -56,9 +56,11 @@ const Navbar = () => {
           >
             <Box className='flex items-center justify-center gap-4'>
               <img className='w-6 h-6' src={logo} alt='WorkWave Logo' />
-              <h1 className='font-bold dark:text-lightSecondary text-darkSecondary'>
-                WorkWave
-              </h1>
+              <NavLink to='/'>
+                <h1 className='font-bold dark:text-lightSecondary text-darkSecondary'>
+                  WorkWave
+                </h1>
+              </NavLink>
             </Box>
           </Typography>
           <div className='flex items-center gap-6 justify-center'>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { NavLink } from 'react-router-dom';
 import logInAmico from '../../assets/Login-amico.png';
 
 const Login = () => {
@@ -17,19 +18,19 @@ const Login = () => {
           <img
             src={logInAmico}
             alt='Login illustration'
-            className='w-full h-auto'
+            className='w-full h-auto object-cover'
           />
         </div>
         {/* Form Section */}
         <div className='w-full max-w-md p-8 rounded-lg shadow-md bg-white dark:bg-gray-800'>
-          <h2 className='text-2xl font-bold text-center text-gray-800 dark:text-white mb-6'>
+          <h2 className='text-2xl font-bold text-center text-gray-800 dark:text-white mb-6 '>
             Welcome to WorkWave
           </h2>
-          <p className='text-center text-gray-400 mb-4'>
+          <p className='text-center text-gray-400 mb-4 flex items-center justify-center'>
             Need an account?
-            <a href='#' className='text-blue-500 hover:underline'>
-              Sign Up
-            </a>
+            <NavLink to='/signup'>
+              <p className='text-blue-500 hover:underline'>Sign Up</p>
+            </NavLink>
           </p>
           <div className='flex justify-around mb-6'>
             <button className='px-4 py-2 bg-green-500 text-white rounded-full'>
@@ -84,13 +85,13 @@ const Login = () => {
                 Password*
               </label>
               <div
-                className='absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer'
+                className='absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer '
                 onClick={togglePasswordVisibility}
               >
                 {passwordVisible ? (
-                  <FaEyeSlash size={20} className='text-gray-500' />
+                  <FaEyeSlash size={20} className='text-gray-500 ' />
                 ) : (
-                  <FaEye size={20} className='text-gray-500' />
+                  <FaEye size={20} className='text-gray-500 ' />
                 )}
               </div>
             </div>
