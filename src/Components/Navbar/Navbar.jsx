@@ -1,7 +1,5 @@
-import { Box, IconButton, Toolbar, Typography } from '@mui/material';
+import { Box, Toolbar, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import { FaRegBell } from 'react-icons/fa';
-import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoSettingsOutline } from 'react-icons/io5';
 import {
   MdLogout,
@@ -10,20 +8,17 @@ import {
 } from 'react-icons/md';
 import { RiArrowUpDownFill } from 'react-icons/ri';
 import { NavLink } from 'react-router-dom';
-import logo from '../../assets/WorkWave.png';
+
+import { FaBars } from 'react-icons/fa';
 import Theme from '../../Context/Theme';
 import useAuth from '../../hooks/useAuth';
-
 const Navbar = () => {
-  const { logOut, user } = useAuth();
-
+  const { logOut, user, isOpenButton } = useAuth();
   const [isCardVisible, setIsCardVisible] = useState(false);
   const dropdownRef = useRef(null);
-
   const toggleCardVisibility = () => {
     setIsCardVisible(prev => !prev);
   };
-
   const handleClickOutside = event => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsCardVisible(false);
@@ -40,29 +35,26 @@ const Navbar = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isCardVisible]);
+
+  const [isOpen, setIsOpen] = useState(true);
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+    isOpenButton(isOpen);
+  };
+
   return (
-    <div className='sticky top-0 z-50'>
-      <div className='lg:px-12 bg-lightSecondary dark:bg-darkSecondary'>
-        <Toolbar className='flex justify-between items-center px-4'>
-          <div className='lg:hidden'>
-            <IconButton>
-              <GiHamburgerMenu
-                size={25}
-                className='dark:text-lightSecondary text-darkSecondary'
-              />
-            </IconButton>
-          </div>
+    <div className=' sticky top-0 z-50'>
+      <div className=' bg-lightSecondary dark:bg-darkSecondary'>
+        <Toolbar className='flex justify-between items-center'>
           <Typography
             variant='h6'
             className='text-black no-underline text-lg font-bold flex items-center gap-4'
           >
-            <Box className='flex items-center justify-center gap-4'>
-              <img className='w-6 h-6' src={logo} alt='WorkWave Logo' />
-              <NavLink to='/'>
-                <h1 className='font-bold dark:text-lightSecondary text-darkSecondary'>
-                  WorkWave
-                </h1>
-              </NavLink>
+            <Box className='cursor-pointer dark:text-lightSecondary text-darkSecondary dark:bg-darkSecondary flex items-center '>
+              <FaBars size={25} onClick={toggleSidebar} />
+              <div>
+                <p className='md:hidden block'>WorkWave</p>
+              </div>
             </Box>
           </Typography>
           <div className='flex items-center gap-6 justify-center'>
@@ -80,9 +72,6 @@ const Navbar = () => {
               <Theme />
             </div>
             <Box className='flex items-center justify-center gap-4'>
-              <div className='hidden md:block dark:text-lightSecondary text-darkSecondary dark:bg-darkSecondary'>
-                <FaRegBell size={20} />
-              </div>
               <div
                 onClick={toggleCardVisibility}
                 className='cursor-pointer hidden md:block hover:bg-[#b4bbc2] rounded-xl px-2 py-1 transition-all duration-200 '

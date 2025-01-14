@@ -65,6 +65,10 @@ const AuthProvider = ({ children }) => {
       return unsubscribe();
     };
   }, []);
+  const [value, setValue] = useState(false);
+  const isOpenButton = btn => {
+    setValue(btn);
+  };
 
   const AuthInfo = {
     signInWithGoogle,
@@ -74,6 +78,8 @@ const AuthProvider = ({ children }) => {
     createUser,
     signIn,
     updateUserProfile,
+    value,
+    isOpenButton,
   };
 
   return (

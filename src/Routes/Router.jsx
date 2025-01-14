@@ -1,8 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
-import DashboardLayout from '../Layouts/DashboardLayout';
 import ContactUs from '../Pages/ContactUs/ContactUs';
+import EmployeeList from '../Pages/Dashboard/EmployeeList/EmployeeList';
 import Error from '../Pages/Error/Error';
-import Home from '../Pages/Home/Home';
 import Login from '../Pages/Login/Login';
 import SignUp from '../Pages/SignUp/SignUp';
 import MainLayout from './../Layouts/MainLayout';
@@ -13,10 +12,6 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     errorElement: <Error />,
     children: [
-      {
-        path: '/',
-        element: <Home />,
-      },
       {
         path: '/login',
         element: <Login />,
@@ -29,13 +24,11 @@ const router = createBrowserRouter([
         path: '/contactUs',
         element: <ContactUs />,
       },
+      {
+        path: '/employeeList',
+        element: <EmployeeList />,
+      },
     ],
   },
-
-  {
-    path: '/dashboard',
-    element: <DashboardLayout />,
-  },
 ]);
-
 export default router;
