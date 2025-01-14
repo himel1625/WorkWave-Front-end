@@ -4,7 +4,7 @@ import Navbar from '../Components/Navbar/Navbar';
 
 const MainLayout = () => {
   return (
-    <div className='bg-lightPrimary font-Roboto dark:bg-darkPrimary'>
+    <div className='bg-lightPrimary  dark:bg-darkPrimary font-Roboto'>
       <header>
         <Navbar />
       </header>

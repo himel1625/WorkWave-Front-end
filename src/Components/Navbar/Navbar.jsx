@@ -1,16 +1,42 @@
 import { Box, IconButton, Toolbar, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaRegBell } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
+import { IoSettingsOutline } from 'react-icons/io5';
+import {
+  MdLogout,
+  MdManageAccounts,
+  MdOutlineForwardToInbox,
+} from 'react-icons/md';
 import { RiArrowUpDownFill } from 'react-icons/ri';
+import { NavLink } from 'react-router-dom';
 import logo from '../../assets/WorkWave.png';
 import Theme from '../../Context/Theme';
+
 const Navbar = () => {
   const [isCardVisible, setIsCardVisible] = useState(false);
+  const dropdownRef = useRef(null);
 
   const toggleCardVisibility = () => {
-    setIsCardVisible(!isCardVisible);
+    setIsCardVisible(prev => !prev);
   };
+
+  const handleClickOutside = event => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsCardVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isCardVisible) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isCardVisible]);
 
   return (
     <div className='fixed w-full top-0 z-50'>
@@ -26,7 +52,6 @@ const Navbar = () => {
           </div>
           <Typography
             variant='h6'
-            to='/'
             className='text-black no-underline text-lg font-bold flex items-center gap-4'
           >
             <Box className='flex items-center justify-center gap-4'>
@@ -41,30 +66,75 @@ const Navbar = () => {
               <Theme />
             </div>
             <Box className='flex items-center justify-center gap-4'>
-              <div className='hidden md:block dark:text-lightSecondary text-darkSecondary'>
-                <FaRegBell size={25} />
+              <div className='hidden md:block dark:text-lightSecondary text-darkSecondary dark:bg-darkSecondary'>
+                <FaRegBell size={20} />
               </div>
-
-              <div
-                className='w-6 h-6 bg-red-600 cursor-pointer hidden md:block'
-                onClick={toggleCardVisibility}
-              ></div>
-
               <div
                 onClick={toggleCardVisibility}
-                className='md:hidden  cursor-pointer  dark:text-lightSecondary text-darkSecondary'
+                className='cursor-pointer hidden md:block hover:bg-[#b4bbc2] rounded-xl px-2 py-1 transition-all duration-200 '
               >
+                <div className='flex items-center justify-center gap-2'>
+                  <p className='font-bold text-black dark:text-lightSecondary'>
+                    Himel Mia
+                  </p>
+                  <img
+                    className='rounded-full w-8 h-8 object-cover'
+                    src='https://i.ibb.co/pJV9bWj/man.jpg'
+                    alt=''
+                  />
+                </div>
+              </div>
+              <div className='md:hidden cursor-pointer dark:text-lightSecondary text-darkSecondary '>
                 <RiArrowUpDownFill size={25} />
               </div>
             </Box>
           </div>
         </Toolbar>
         {isCardVisible && (
-          <div className='absolute top-16 right-4 bg-white dark:bg-gray-800 shadow-lg p-4 rounded-lg'>
-            {/* Your card content */}
-            <h3>Notification Card</h3>
-            <p>This is where the card content goes.</p>
-            <button onClick={toggleCardVisibility}>Close</button>
+          <div
+            ref={dropdownRef}
+            className='absolute top-13 right-10 bg-[#efedf0] dark:bg-gray-800 shadow-lg p-4 cursor-pointer w-44 h-44 rounded-lg'
+          >
+            <div className='space-y-4'>
+              <div className='flex items-center gap-2'>
+                <MdManageAccounts
+                  size={20}
+                  className='text-darkSecondary dark:text-lightSecondary'
+                />
+                <p className='text-darkSecondary dark:text-lightSecondary  font-bold'>
+                  Account
+                </p>
+              </div>
+              <div className='flex items-center gap-2'>
+                <MdOutlineForwardToInbox
+                  size={20}
+                  className='text-darkSecondary dark:text-lightSecondary'
+                />
+                <p className='text-darkSecondary dark:text-lightSecondary font-bold'>
+                  Inbox
+                </p>
+              </div>
+              <div className='flex items-center gap-2'>
+                <IoSettingsOutline
+                  size={20}
+                  className='text-darkSecondary dark:text-lightSecondary'
+                />
+                <p className='text-darkSecondary dark:text-lightSecondary font-bold'>
+                  Settings
+                </p>
+              </div>
+              <div className='flex items-center gap-2'>
+                <MdLogout
+                  size={20}
+                  className='text-darkSecondary dark:text-lightSecondary'
+                />
+                <NavLink to='/login'>
+                  <p className='text-darkSecondary dark:text-lightSecondary font-bold'>
+                    Logout
+                  </p>
+                </NavLink>
+              </div>
+            </div>
           </div>
         )}
       </div>
