@@ -1,9 +1,12 @@
 import axios from 'axios';
 import {
+  createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from 'firebase/auth';
 import { createContext, useEffect, useState } from 'react';
 import auth from '../Config/auth';
@@ -13,34 +16,59 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   console.log(user);
   const [loading, setLoading] = useState(true);
+
   const signInWithGoogle = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
+
+  const createUser = (email, password) => {
+    setLoading(true);
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+  const signIn = (email, password) => {
+    setLoading(true);
+    return signInWithEmailAndPassword(auth, email, password);
+  };
   const logOut = async () => {
     setLoading(true);
-    const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/logout`, {
-      withCredentials: true,
-    });
-    console.log(data);
     return signOut(auth);
   };
-
-  // onAuthStateChange
+  const updateUserProfile = (name, photo) => {
+    return updateProfile(auth.currentUser, {
+      displayName: name,
+      photoURL: photo,
+    });
+  };
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async currentUser => {
+      console.log('CurrentUser-->', currentUser?.email);
       if (currentUser?.email) {
         setUser(currentUser);
-        const { data } = await axios.post(
+        await axios.post(
+          `${import.meta.env.VITE_API_URL}/users/${currentUser?.email}`,
+          {
+            name: currentUser?.displayName,
+            image: currentUser?.photoURL,
+            email: currentUser?.email,
+          },
+        );
+
+        // Get JWT token
+        await axios.post(
           `${import.meta.env.VITE_API_URL}/jwt`,
           {
             email: currentUser?.email,
           },
           { withCredentials: true },
         );
-        console.log(data);
+      } else {
+        setUser(currentUser);
+        await axios.get(`${import.meta.env.VITE_API_URL}/logout`, {
+          withCredentials: true,
+        });
       }
-      setUser(currentUser);
       setLoading(false);
     });
     return () => {
@@ -53,6 +81,9 @@ const AuthProvider = ({ children }) => {
     user,
     loading,
     logOut,
+    createUser,
+    signIn,
+    updateUserProfile,
   };
 
   return (

@@ -1,6 +1,5 @@
 import { Box, IconButton, Toolbar, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
-import toast from 'react-hot-toast';
 import { FaRegBell } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoSettingsOutline } from 'react-icons/io5';
@@ -17,10 +16,7 @@ import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
   const { logOut, user } = useAuth();
-  const handleLogOut = () => {
-    logOut();
-    toast.success('LogOut success');
-  };
+
   const [isCardVisible, setIsCardVisible] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -92,7 +88,7 @@ const Navbar = () => {
                   </p>
                   <img
                     className='rounded-full w-8 h-8 object-cover'
-                    src='https://i.ibb.co/pJV9bWj/man.jpg'
+                    src={user && user?.photoURL}
                     alt=''
                   />
                 </div>
@@ -136,10 +132,7 @@ const Navbar = () => {
                   Settings
                 </p>
               </div>
-              <div
-                onClick={() => handleLogOut()}
-                className='flex items-center gap-2'
-              >
+              <div onClick={() => logOut()} className='flex items-center gap-2'>
                 <MdLogout
                   size={20}
                   className='text-darkSecondary dark:text-lightSecondary'

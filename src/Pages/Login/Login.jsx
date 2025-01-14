@@ -1,16 +1,16 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import google from '../../assets/Google.png';
 import logInAmico from '../../assets/Login-amico.png';
 import useAuth from '../../hooks/useAuth';
-import toast from 'react-hot-toast';
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const fromHome = location?.state || '/';
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, signIn } = useAuth();
   // Google Signin
   const handleGoogleSignIn = async () => {
     try {
@@ -33,8 +33,21 @@ const Login = () => {
 
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
-  const onSubmit = data => {
-    console.log('Form data:', data);
+  const onSubmit = async data => {
+    const { email, password } = data;
+    if (password.length < 6) {
+      toast.error('❌ Password must contain at least 6 characters');
+    }
+    if (!/[A-Z]/.test(password)) {
+      toast.error('❌ Password must contain at least one uppercase letter');
+    }
+    if (!/[a-z]/.test(password)) {
+      toast.error('❌ Password must contain at least one lowercase letter');
+    }
+    await signIn(email, password);
+    toast.success('Signin Successful');
+
+    navigate(fromHome, { replace: true });
   };
 
   return (

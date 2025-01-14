@@ -1,14 +1,13 @@
-
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAGLN6PxTQyXwHIl2nGTaDhRX24jqVCyD4',
-  authDomain: 'login-with-eddbb.firebaseapp.com',
-  projectId: 'login-with-eddbb',
-  storageBucket: 'login-with-eddbb.firebasestorage.app',
-  messagingSenderId: '1032459590462',
-  appId: '1:1032459590462:web:35f6f9af00d80dd624aa6f',
+  apiKey: import.meta.env.VITE_apiKey,
+  authDomain: import.meta.env.VITE_authDomain,
+  projectId: import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_messagingSenderId,
+  appId: import.meta.env.VITE_appId,
 };
 
 // Initialize Firebase
