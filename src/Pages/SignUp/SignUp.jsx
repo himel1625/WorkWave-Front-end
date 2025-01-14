@@ -1,17 +1,43 @@
-import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'; // Import icons
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import google from '../../assets/Google.png';
 import upAmico from '../../assets/Sign up-amico.png';
-
+import useAuth from '../../hooks/useAuth';
 const SignUp = () => {
-  const [passwordVisible, setPasswordVisible] = useState(false); // State to toggle password visibility
+  const navigate = useNavigate();
+  const location = useLocation();
+  const fromHome = location?.state || '/';
+  const { signInWithGoogle } = useAuth();
+  // Google Signin
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      toast.success('Signin Successful');
+      navigate(fromHome, { replace: true });
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.message);
+    }
+  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const [passwordVisible, setPasswordVisible] = React.useState(false);
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(prevState => !prevState); // Toggle the password visibility
+  const togglePasswordVisibility = () =>
+    setPasswordVisible(prevState => !prevState);
+
+  const onSubmit = data => {
+    console.log('Form data:', data);
   };
 
   return (
-    <div className='min-h-screen bg-lightPrimary dark:bg-darkPrimary flex items-center justify-center md:mt-6 '>
+    <div className='min-h-screen bg-lightPrimary dark:bg-darkPrimary flex items-center justify-center md:mt-6'>
       <div className='flex justify-center items-center hidden md:block'>
         <img
           src={upAmico}
@@ -26,7 +52,8 @@ const SignUp = () => {
         <p className='text-center text-gray-500 mb-6'>
           Enter details to create your account
         </p>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Username Field */}
           <div className='mb-4'>
             <label
               className='block text-gray-600 text-sm font-medium mb-1'
@@ -35,12 +62,20 @@ const SignUp = () => {
               Username*
             </label>
             <input
+              {...register('username', { required: 'Username is required' })}
               type='text'
               id='username'
               className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
               placeholder='Enter your username'
             />
+            {errors.username && (
+              <p className='text-red-500 text-xs mt-1'>
+                {errors.username.message}
+              </p>
+            )}
           </div>
+
+          {/* Photo Field */}
           <div className='mb-4'>
             <label
               className='block text-gray-600 text-sm font-medium mb-1'
@@ -49,12 +84,14 @@ const SignUp = () => {
               Photo
             </label>
             <input
+              {...register('photo')}
               type='file'
               id='file'
               className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
-              placeholder='Enter your file'
             />
           </div>
+
+          {/* Email Field */}
           <div className='mb-4'>
             <label
               className='block text-gray-600 text-sm font-medium mb-1'
@@ -63,12 +100,20 @@ const SignUp = () => {
               Email*
             </label>
             <input
+              {...register('email', { required: 'Email is required' })}
               type='email'
               id='email'
               className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
               placeholder='Enter your email'
             />
+            {errors.email && (
+              <p className='text-red-500 text-xs mt-1'>
+                {errors.email.message}
+              </p>
+            )}
           </div>
+
+          {/* Password Field */}
           <div className='mb-4 relative'>
             <label
               className='block text-gray-600 text-sm font-medium mb-1'
@@ -77,7 +122,8 @@ const SignUp = () => {
               Password*
             </label>
             <input
-              type={passwordVisible ? 'text' : 'password'} // Toggle input type based on passwordVisible state
+              {...register('password', { required: 'Password is required' })}
+              type={passwordVisible ? 'text' : 'password'}
               id='password'
               className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
               placeholder='Enter your password'
@@ -93,6 +139,11 @@ const SignUp = () => {
                 <AiOutlineEye size={20} className='text-gray-500' />
               )}
             </button>
+            {errors.password && (
+              <p className='text-red-500 text-xs mt-1'>
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           <p className='text-sm text-gray-500 mb-6 flex'>
@@ -108,7 +159,13 @@ const SignUp = () => {
             Register
           </button>
           <div className='text-center text-gray-500 my-4'>OR</div>
-          <div className='flex justify-center space-x-4'></div>
+          <div
+            onClick={() => handleGoogleSignIn()}
+            className='flex justify-center items-center mt-4 gap-4 cursor-pointer'
+          >
+            <img className='w-8 h-8' src={google} alt='google' />
+            <p className='font-bold'>Login with Google</p>
+          </div>
         </form>
       </div>
     </div>

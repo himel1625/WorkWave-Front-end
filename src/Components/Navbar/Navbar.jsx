@@ -1,5 +1,6 @@
 import { Box, IconButton, Toolbar, Typography } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { FaRegBell } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoSettingsOutline } from 'react-icons/io5';
@@ -12,8 +13,14 @@ import { RiArrowUpDownFill } from 'react-icons/ri';
 import { NavLink } from 'react-router-dom';
 import logo from '../../assets/WorkWave.png';
 import Theme from '../../Context/Theme';
+import useAuth from '../../hooks/useAuth';
 
 const Navbar = () => {
+  const { logOut, user } = useAuth();
+  const handleLogOut = () => {
+    logOut();
+    toast.success('LogOut success');
+  };
   const [isCardVisible, setIsCardVisible] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -64,6 +71,9 @@ const Navbar = () => {
             </Box>
           </Typography>
           <div className='flex items-center gap-6 justify-center'>
+            <div>
+              <NavLink to='/login'>login</NavLink>
+            </div>
             <div className='hidden md:block'>
               <Theme />
             </div>
@@ -77,7 +87,8 @@ const Navbar = () => {
               >
                 <div className='flex items-center justify-center gap-2'>
                   <p className='font-bold text-black dark:text-lightSecondary'>
-                    Himel Mia
+                    {/* Fixed to display correct property */}
+                    <p>{user?.displayName || 'User Name'}</p>
                   </p>
                   <img
                     className='rounded-full w-8 h-8 object-cover'
@@ -125,16 +136,17 @@ const Navbar = () => {
                   Settings
                 </p>
               </div>
-              <div className='flex items-center gap-2'>
+              <div
+                onClick={() => handleLogOut()}
+                className='flex items-center gap-2'
+              >
                 <MdLogout
                   size={20}
                   className='text-darkSecondary dark:text-lightSecondary'
                 />
-                <NavLink to='/login'>
-                  <p className='text-darkSecondary dark:text-lightSecondary font-bold'>
-                    Logout
-                  </p>
-                </NavLink>
+                <p className='text-darkSecondary dark:text-lightSecondary font-bold'>
+                  Logout
+                </p>
               </div>
             </div>
           </div>
