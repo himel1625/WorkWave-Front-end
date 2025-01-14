@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import DashboardLayout from '../Layouts/DashboardLayout';
+import ContactUs from '../Pages/ContactUs/ContactUs';
 import Error from '../Pages/Error/Error';
 import Home from '../Pages/Home/Home';
 import Login from '../Pages/Login/Login';
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignUp />,
+      },
+      {
+        path: '/contactUs',
+        element: <ContactUs />,
       },
     ],
   },

@@ -14,7 +14,6 @@ export const AuthContext = createContext(null);
 const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  console.log(user);
   const [loading, setLoading] = useState(true);
 
   const signInWithGoogle = () => {
@@ -40,20 +39,11 @@ const AuthProvider = ({ children }) => {
       photoURL: photo,
     });
   };
-  
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async currentUser => {
-      console.log('CurrentUser-->', currentUser?.email);
       if (currentUser?.email) {
         setUser(currentUser);
-        await axios.post(
-          `${import.meta.env.VITE_API_URL}/users/${currentUser?.email}`,
-          {
-            name: currentUser?.displayName,
-            image: currentUser?.photoURL,
-            email: currentUser?.email,
-          },
-        );
 
         // Get JWT token
         await axios.post(

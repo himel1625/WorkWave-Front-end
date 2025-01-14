@@ -40,9 +40,8 @@ const Navbar = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isCardVisible]);
-
   return (
-    <div className='fixed w-full top-0 z-50'>
+    <div className='sticky top-0 z-50'>
       <div className='lg:px-12 bg-lightSecondary dark:bg-darkSecondary'>
         <Toolbar className='flex justify-between items-center px-4'>
           <div className='lg:hidden'>
@@ -68,7 +67,14 @@ const Navbar = () => {
           </Typography>
           <div className='flex items-center gap-6 justify-center'>
             <div>
-              <NavLink to='/login'>login</NavLink>
+              <NavLink to='/contactUs'>
+                <p className='font-bold'>ContactUs</p>
+              </NavLink>
+            </div>
+            <div>
+              <NavLink to='/login'>
+                <p className='font-bold'>login</p>
+              </NavLink>
             </div>
             <div className='hidden md:block'>
               <Theme />
@@ -83,13 +89,15 @@ const Navbar = () => {
               >
                 <div className='flex items-center justify-center gap-2'>
                   <p className='font-bold text-black dark:text-lightSecondary'>
-                    {/* Fixed to display correct property */}
                     <p>{user?.displayName || 'User Name'}</p>
                   </p>
                   <img
                     className='rounded-full w-8 h-8 object-cover'
-                    src={user && user?.photoURL}
-                    alt=''
+                    src={
+                      (user && user?.photoURL) ||
+                      'https://i.ibb.co.com/MVHh5Bd/man.jpg'
+                    }
+                    alt='user name'
                   />
                 </div>
               </div>
