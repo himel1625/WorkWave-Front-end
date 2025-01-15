@@ -24,9 +24,9 @@ const PaymentHistoryTable = () => {
   ];
 
   return (
-    <div className='overflow-x-auto'>
+    <div className='overflow-x-auto dark:text-lightSecondary text-darkSecondary'>
       <table className='min-w-full table-auto'>
-        <thead className='bg-gray-100'>
+        <thead className=''>
           <tr>
             <th className='px-4 py-2 border-b text-left'>Month</th>
             <th className='px-4 py-2 border-b text-left'>Year</th>
