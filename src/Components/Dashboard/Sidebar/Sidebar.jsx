@@ -10,11 +10,11 @@ const Sidebar = () => {
   return (
     <div className='hidden md:block'>
       <div
-        className={`flex flex-col h-screen bg-lightSecondary dark:bg-darkSecondary   ${
+        className={`flex flex-col h-screen bg-lightSecondary dark:bg-darkSecondary transition-all duration-700 ${
           value ? 'w-60' : 'w-16'
         }`}
       >
-        {/* Logo Section */}
+       
         <NavLink to='/'>
           <div
             className={`flex items-center ${
