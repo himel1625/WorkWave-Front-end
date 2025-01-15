@@ -14,7 +14,6 @@ import useRole from '../../../Hooks/useRole';
 const Sidebar = () => {
   const [role, isLoading] = useRole();
   const { value, user } = useAuth();
-
   return (
     <div className='hidden md:block'>
       <div

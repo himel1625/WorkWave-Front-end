@@ -5,6 +5,7 @@ import PaymentHistoryTable from '../Pages/Dashboard/EmployeeList/PaymentHistoryT
 import WorkSheetForm from '../Pages/Dashboard/EmployeeList/WorkSheetForm/WorkSheetForm';
 import WorkSheetTable from '../Pages/Dashboard/EmployeeList/WorkSheetTable/WorkSheetTable';
 import Error from '../Pages/Error/Error';
+import Home from '../Pages/Home/Home';
 import Login from '../Pages/Login/Login';
 import SignUp from '../Pages/SignUp/SignUp';
 import MainLayout from './../Layouts/MainLayout';
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
     element: <MainLayout />,
     errorElement: <Error />,
     children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
       {
         path: '/login',
         element: <Login />,

@@ -37,6 +37,8 @@ const Login = () => {
 
   const onSubmit = async data => {
     const { email, password, role } = data;
+    console.log(email, role);
+    await saveUser(data);
 
     if (!email || !email.includes('@')) {
       toast.error('❌ Please provide a valid email');
@@ -56,13 +58,7 @@ const Login = () => {
       return;
     }
 
-    if (!role) {
-      toast.error('❌ Please select a role');
-      return;
-    }
-
     try {
-      await saveUser(data, role);
       await signIn(email, password);
       toast.success('Signin Successful');
       navigate(fromHome, { replace: true });

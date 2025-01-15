@@ -43,13 +43,17 @@ const PaymentHistoryTable = () => {
               <td className='px-4 py-2 border-b'>{payment.amount}</td>
               <td className='px-4 py-2 border-b'>{payment.transactionId}</td>
               <td className='px-4 py-2 border-b'>
-                <div className='flex gap-2'>
-                  <button className='text-blue-500'>
-                    <FaPen />
-                  </button>
-                  <button className='text-red-500'>
-                    <FaTrash />
-                  </button>
+                <div className='flex items-center gap-6'>
+                  <div>
+                    <button className='text-blue-500'>
+                      <FaPen />
+                    </button>
+                  </div>
+                  <div>
+                    <button className='text-red-500'>
+                      <FaTrash />
+                    </button>
+                  </div>
                 </div>
               </td>
             </tr>
