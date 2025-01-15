@@ -5,6 +5,7 @@ import Error from '../Pages/Error/Error';
 import Login from '../Pages/Login/Login';
 import SignUp from '../Pages/SignUp/SignUp';
 import MainLayout from './../Layouts/MainLayout';
+import HrRoute from './HrRoute';
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/employeeList',
-        element: <EmployeeList />,
+        element: (
+          <HrRoute>
+            <EmployeeList />,
+          </HrRoute>
+        ),
       },
     ],
   },

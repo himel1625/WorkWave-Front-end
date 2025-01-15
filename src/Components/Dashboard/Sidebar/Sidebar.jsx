@@ -14,7 +14,6 @@ const Sidebar = () => {
           value ? 'w-60' : 'w-16'
         }`}
       >
-       
         <NavLink to='/'>
           <div
             className={`flex items-center ${
@@ -45,6 +44,7 @@ const Sidebar = () => {
         >
           <img
             className='w-20 h-20 rounded-lg object-cover'
+            referrerPolicy='no-referrer'
             src={
               (user && user?.photoURL) || 'https://i.ibb.co.com/MVHh5Bd/man.jpg'
             }

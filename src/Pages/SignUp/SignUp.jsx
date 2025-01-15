@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { imageUpload } from '../../Api/utils';
 import google from '../../assets/Google.png';
 import upAmico from '../../assets/Sign up-amico.png';
@@ -10,9 +10,7 @@ import useAuth from '../../hooks/useAuth';
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const fromHome = location?.state || '/';
-  const { signInWithGoogle, createUser, updateUserProfile } = useAuth();
+  const { signInWithGoogle, createUser, updateUserProfile, logOut } = useAuth();
 
   const [passwordVisible, setPasswordVisible] = React.useState(false);
 
@@ -23,7 +21,8 @@ const SignUp = () => {
     try {
       await signInWithGoogle();
       toast.success('Signin Successful');
-      navigate(fromHome, { replace: true });
+      logOut();
+      navigate('/login');
     } catch (err) {
       console.error(err);
       toast.error(err?.message || 'Google Sign-In Failed');
@@ -39,30 +38,28 @@ const SignUp = () => {
   const onSubmit = async data => {
     try {
       const { email, password, username } = data;
-   if (password.length < 6) {
-     toast.error('❌ Password must contain at least 6 characters');
-   }
-   if (!/[A-Z]/.test(password)) {
-     toast.error('❌ Password must contain at least one uppercase letter');
-   }
-   if (!/[a-z]/.test(password)) {
-     toast.error('❌ Password must contain at least one lowercase letter');
-   }
+      if (password.length < 6) {
+        toast.error('❌ Password must contain at least 6 characters');
+      }
+      if (!/[A-Z]/.test(password)) {
+        toast.error('❌ Password must contain at least one uppercase letter');
+      }
+      if (!/[a-z]/.test(password)) {
+        toast.error('❌ Password must contain at least one lowercase letter');
+      }
       const file = data.photo?.[0];
       if (!file) {
         toast.error('Photo is required');
         return;
       }
-
       const photoURL = await imageUpload(file);
       toast.success('Photo uploaded successfully!');
-
+      navigate('/login');
       await createUser(email, password);
       toast.success('Account created successfully!');
       await updateUserProfile(username, photoURL);
+      logOut();
       toast.success('Profile updated successfully!');
-
-      navigate(fromHome, { replace: true });
     } catch (error) {
       console.error('Error:', error);
     }

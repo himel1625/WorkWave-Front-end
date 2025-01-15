@@ -3,15 +3,17 @@ import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { saveUser } from '../../Api/utils';
 import google from '../../assets/Google.png';
 import logInAmico from '../../assets/Login-amico.png';
 import useAuth from '../../hooks/useAuth';
+
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const fromHome = location?.state || '/';
   const { signInWithGoogle, signIn } = useAuth();
-  // Google Signin
+
   const handleGoogleSignIn = async () => {
     try {
       await signInWithGoogle();
@@ -34,26 +36,45 @@ const Login = () => {
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
   const onSubmit = async data => {
-    const { email, password } = data;
+    const { email, password, role } = data;
+
+    if (!email || !email.includes('@')) {
+      toast.error('❌ Please provide a valid email');
+      return;
+    }
+
     if (password.length < 6) {
       toast.error('❌ Password must contain at least 6 characters');
+      return;
     }
     if (!/[A-Z]/.test(password)) {
       toast.error('❌ Password must contain at least one uppercase letter');
+      return;
     }
     if (!/[a-z]/.test(password)) {
       toast.error('❌ Password must contain at least one lowercase letter');
+      return;
     }
-    await signIn(email, password);
-    toast.success('Signin Successful');
 
-    navigate(fromHome, { replace: true });
+    if (!role) {
+      toast.error('❌ Please select a role');
+      return;
+    }
+
+    try {
+      await saveUser(data, role);
+      await signIn(email, password);
+      toast.success('Signin Successful');
+      navigate(fromHome, { replace: true });
+    } catch (err) {
+      console.log(err);
+      toast.error('❌ Error during login. Please try again');
+    }
   };
 
   return (
     <div className='min-h-screen bg-lightPrimary dark:bg-darkPrimary flex items-center justify-center'>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl p-8'>
-        {/* Image Section */}
         <div className='flex justify-center items-center hidden md:block'>
           <img
             src={logInAmico}
@@ -61,7 +82,6 @@ const Login = () => {
             className='w-full h-auto object-cover'
           />
         </div>
-        {/* Form Section */}
         <div className='w-full max-w-md p-8 rounded-lg shadow-md bg-white dark:bg-gray-800'>
           <h2 className='text-2xl font-bold text-center text-gray-800 dark:text-white mb-6'>
             Welcome to WorkWave
@@ -72,41 +92,34 @@ const Login = () => {
               <p className='text-blue-500 hover:underline'>Sign Up</p>
             </NavLink>
           </p>
-          <div className='flex justify-around mb-6'>
-            <button className='px-4 py-2 bg-green-500 text-white rounded-full'>
-              Admin
-            </button>
-            <button className='px-4 py-2 bg-orange-500 text-white rounded-full'>
-              Employee
-            </button>
-            <button className='px-4 py-2 bg-blue-500 text-white rounded-full'>
-              HR
-            </button>
-          </div>
           <form onSubmit={handleSubmit(onSubmit)}>
-            {/* Username Field */}
             <div className='mb-6'>
               <label
-                htmlFor='username'
+                htmlFor='email'
                 className='block text-sm font-medium text-gray-300 mb-2'
               >
-                Username*
+                Email*
               </label>
               <input
-                {...register('username', { required: 'Username is required' })}
-                type='text'
-                id='username'
+                {...register('email', {
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                    message: 'Invalid email address',
+                  },
+                })}
+                type='email'
+                id='email'
                 className='w-full px-4 py-3 border-2 border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300'
-                placeholder='Enter username'
+                placeholder='Enter your email'
               />
-              {errors.username && (
+              {errors.email && (
                 <p className='text-red-500 text-xs mt-1'>
-                  {errors.username.message}
+                  {errors.email.message}
                 </p>
               )}
             </div>
 
-            {/* Password Field */}
             <div className='mb-6'>
               <label
                 htmlFor='password'
@@ -118,6 +131,18 @@ const Login = () => {
                 <input
                   {...register('password', {
                     required: 'Password is required',
+                    minLength: {
+                      value: 6,
+                      message: 'Password must be at least 6 characters long',
+                    },
+                    pattern: {
+                      value: /[A-Z]/,
+                      message:
+                        'Password must contain at least one uppercase letter',
+                    },
+                    validate: value =>
+                      /[a-z]/.test(value) ||
+                      'Password must contain at least one lowercase letter',
                   })}
                   type={passwordVisible ? 'text' : 'password'}
                   id='password'
@@ -142,20 +167,29 @@ const Login = () => {
               )}
             </div>
 
-            <div className='flex items-center justify-between mb-6'>
-              <label className='flex items-center text-gray-400'>
-                <input
-                  type='checkbox'
-                  className='form-checkbox h-4 w-4 text-blue-500'
-                />
-                <span className='ml-2'>Remember me</span>
+            <div className='mb-6'>
+              <label
+                htmlFor='role'
+                className='block text-sm font-medium text-gray-300 mb-2'
+              >
+                Select Role*
               </label>
-              <a href='#' className='text-sm text-blue-500 hover:underline'>
-                Forgot Password?
-              </a>
+              <select
+                {...register('role', { required: 'Role is required' })}
+                id='role'
+                className='w-full px-4 py-3 border-2 border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300'
+              >
+                <option value='Admin'>Admin</option>
+                <option value='HR'>HR</option>
+                <option value='Employee'>Employee</option>
+              </select>
+              {errors.role && (
+                <p className='text-red-500 text-xs mt-1'>
+                  {errors.role.message}
+                </p>
+              )}
             </div>
 
-            {/* Submit Button */}
             <button
               type='submit'
               className='w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition duration-300'

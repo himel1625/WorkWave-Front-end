@@ -9,3 +9,18 @@ export const imageUpload = async imageData => {
   );
   return data.data.display_url;
 };
+
+export const saveUser = async (user, role) => {
+  console.log(user);
+  try {
+    await axios.post(`${import.meta.env.VITE_API_URL}/users/${user?.email}`, {
+      name: user?.displayName,
+      image: user?.photoURL,
+      email: user?.email,
+      role: role,
+    });
+    console.log('User data sent successfully!');
+  } catch (error) {
+    console.error('Error saving user:', error);
+  }
+};

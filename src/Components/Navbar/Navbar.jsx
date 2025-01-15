@@ -59,11 +59,11 @@ const Navbar = () => {
             variant='h6'
             className='text-black no-underline text-lg font-bold flex items-center gap-4'
           >
-            <Box className='cursor-pointer dark:text-lightSecondary text-darkSecondary dark:bg-darkSecondary flex items-center justify-center'>
+            <Box className='cursor-pointer dark:text-lightSecondary text-darkSecondary dark:bg-darkSecondary flex items-center justify-center '>
               <div className='flex items-center justify-center'>
                 <NavLink to='/'>
                   <div
-                    className={`md:flex items-center justify-center pb-5 hidden md:block ${
+                    className={`md:flex items-center justify-center pb-5 hidden md:block  ${
                       isOpen
                         ? 'items-center justify-center mt-5'
                         : 'items-center justify-center mt-5'
@@ -113,6 +113,7 @@ const Navbar = () => {
                   </p>
                   <img
                     className='rounded-full w-8 h-8 object-cover'
+                    referrerPolicy='no-referrer'
                     src={
                       (user && user?.photoURL) ||
                       'https://i.ibb.co.com/MVHh5Bd/man.jpg'
@@ -206,6 +207,7 @@ const Navbar = () => {
                 </p>
                 <img
                   className='rounded-full w-8 h-8 object-cover'
+                  referrerPolicy='no-referrer'
                   src={
                     (user && user?.photoURL) ||
                     'https://i.ibb.co.com/MVHh5Bd/man.jpg'
