@@ -1,11 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
 import ContactUs from '../Pages/ContactUs/ContactUs';
-import EmployeeList from '../Pages/Dashboard/EmployeeList/EmployeeList';
+
+import PaymentHistoryTable from '../Pages/Dashboard/EmployeeList/PaymentHistoryTable/PaymentHistoryTable';
+import WorkSheetForm from '../Pages/Dashboard/EmployeeList/WorkSheetForm/WorkSheetForm';
+import WorkSheetTable from '../Pages/Dashboard/EmployeeList/WorkSheetTable/WorkSheetTable';
 import Error from '../Pages/Error/Error';
 import Login from '../Pages/Login/Login';
 import SignUp from '../Pages/SignUp/SignUp';
 import MainLayout from './../Layouts/MainLayout';
-import HrRoute from './HrRoute';
+import EmployeeRoute from './EmployeeRoute';
 
 const router = createBrowserRouter([
   {
@@ -26,11 +29,27 @@ const router = createBrowserRouter([
         element: <ContactUs />,
       },
       {
-        path: '/employeeList',
+        path: '/workSheetForm',
         element: (
-          <HrRoute>
-            <EmployeeList />,
-          </HrRoute>
+          <EmployeeRoute>
+            <WorkSheetForm />
+          </EmployeeRoute>
+        ),
+      },
+      {
+        path: '/workSheetTable',
+        element: (
+          <EmployeeRoute>
+            <WorkSheetTable />
+          </EmployeeRoute>
+        ),
+      },
+      {
+        path: '/paymentHistoryTable',
+        element: (
+          <EmployeeRoute>
+            <PaymentHistoryTable />
+          </EmployeeRoute>
         ),
       },
     ],

@@ -179,7 +179,7 @@ const Login = () => {
                 id='role'
                 className='w-full px-4 py-3 border-2 border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300'
               >
-                <option value='Admin'>Admin</option>
+                {/* <option value='Admin'>Admin</option> */}
                 <option value='HR'>HR</option>
                 <option value='Employee'>Employee</option>
               </select>

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -36,6 +37,12 @@ const SignUp = () => {
   } = useForm();
 
   const onSubmit = async data => {
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/bank-data`, data);
+    } catch (error) {
+      console.error('Error posting data:', error);
+    }
+
     try {
       const { email, password, username } = data;
       if (password.length < 6) {
@@ -184,6 +191,72 @@ const SignUp = () => {
             )}
           </div>
 
+          <div className='mb-4'>
+            <label
+              className='block text-gray-600 text-sm font-medium mb-1'
+              htmlFor='bank_account_no'
+            >
+              Bank Account No
+            </label>
+            <input
+              {...register('text', {
+                required: '   Bank Account No is required',
+              })}
+              type='text'
+              id='bank_account_no'
+              placeholder='bank_account_no'
+              className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none'
+            />
+            {errors.bank_account_no && (
+              <p className='text-red-500 text-xs mt-1'>
+                {errors.bank_account_no.message}
+              </p>
+            )}
+          </div>
+          <div className='flex items-center justify-center gap-4'>
+            <div className='mb-4'>
+              <label
+                className='block text-gray-600 text-sm font-medium mb-1'
+                htmlFor='salary'
+              >
+                Salary
+              </label>
+              <input
+                {...register('number', {
+                  required: ' salary is required',
+                })}
+                type='number'
+                id='salary'
+                placeholder='salary'
+                className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:outline-none'
+              />
+              {errors.salary && (
+                <p className='text-red-500 text-xs mt-1'>
+                  {errors.salary.message}
+                </p>
+              )}
+            </div>
+            <div className='mb-4'>
+              <label
+                className='block text-gray-600 text-sm font-medium mb-1'
+                htmlFor='designation'
+              >
+                Designation
+              </label>
+              <select
+                {...register('designation')}
+                id='designation'
+                className='w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-600 focus:outline-none'
+              >
+                <option value='Sales Assistant'>Sales Assistant</option>
+                <option value='Social Media Executive'>
+                  Social Media Executive
+                </option>
+                <option value='Digital Marketer'>Digital Marketer</option>
+              </select>
+            </div>
+          </div>
+
           {/* Login Redirect */}
           <p className='text-sm text-gray-500 mb-6 flex'>
             Already Registered?{' '}
@@ -214,5 +287,4 @@ const SignUp = () => {
     </div>
   );
 };
-
 export default SignUp;
