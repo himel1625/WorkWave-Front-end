@@ -1,12 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
-import { FaInfoCircle } from 'react-icons/fa'; // Import the icon
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker'; // Import DatePicker
+import 'react-datepicker/dist/react-datepicker.css'; // Import styles for DatePicker
+import { FaCreditCard, FaInfoCircle } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
 import useAxiosPublic from '../../../../Hooks/useAxiosPublic';
 
 const EmployeeList = () => {
   const axiosPublic = useAxiosPublic();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null); // State to store selected date
 
   const { data: employees, isLoading } = useQuery({
     queryKey: ['employee'],
@@ -16,15 +21,46 @@ const EmployeeList = () => {
     },
   });
 
+  const handlePayClick = employee => {
+    setSelectedEmployee(employee);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedEmployee(null);
+    setSelectedDate(null); // Reset date on modal close
+  };
+
+  const handlePaymentSubmit = e => {
+    e.preventDefault();
+
+    if (!selectedDate) {
+      alert('Please select a date');
+      return;
+    }
+
+    const month = selectedDate.toLocaleString('default', { month: 'long' });
+    const year = selectedDate.getFullYear();
+
+    // Here you can handle the payment logic, like sending data to the backend
+    console.log(
+      `Paid ${selectedEmployee.username} for ${month} ${year} - Salary: ${selectedEmployee.number}`,
+    );
+
+    // Close the modal after submission
+    handleCloseModal();
+  };
+
   if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div className='p-6'>
+    <div className='p-6 dark:text-lightSecondary text-darkSecondary'>
       <h2 className='text-xl font-bold mb-4'>Employee List</h2>
       <div className='overflow-x-auto'>
         <table className='table-auto w-full border-collapse border border-gray-300'>
           <thead>
-            <tr className='bg-gray-200'>
+            <tr>
               <th className='border border-gray-300 px-4 py-2'>Name</th>
               <th className='border border-gray-300 px-4 py-2'>Email</th>
               <th className='border border-gray-300 px-4 py-2'>Verify</th>
@@ -36,7 +72,7 @@ const EmployeeList = () => {
           </thead>
           <tbody>
             {employees?.map(employee => (
-              <tr key={employee.email} className='hover:bg-gray-100'>
+              <tr key={employee._id}>
                 <td className='border border-gray-300 px-4 py-2'>
                   {employee.username || 'N/A'}
                 </td>
@@ -44,24 +80,25 @@ const EmployeeList = () => {
                   {employee.email}
                 </td>
                 <td className='border border-gray-300 px-4 py-2'>
-                  {employee.verified ? (
-                    <span className='text-green-600 font-semibold'>
-                      Verified
-                    </span>
+                  {!employee.verified ? (
+                    <span className='text-green-600 font-semibold'>✅</span>
                   ) : (
-                    <span className='text-red-600 font-semibold'>
-                      Not Verified
-                    </span>
+                    <span className='text-red-600 font-semibold'>❌</span>
                   )}
                 </td>
                 <td className='border border-gray-300 px-4 py-2'>
                   {employee.text || 'N/A'}
                 </td>
                 <td className='border border-gray-300 px-4 py-2'>
-                  {employee.pay || 'N/A'}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
                   {employee.number || 'N/A'}
+                </td>
+                <td className='border border-gray-300 px-4 py-2 flex items-center justify-center'>
+                  <button
+                    onClick={() => handlePayClick(employee)}
+                    className='text-green-600 hover:text-green-800'
+                  >
+                    <FaCreditCard size={20} />
+                  </button>
                 </td>
                 <td className='border border-gray-300 px-4 py-2 text-center'>
                   <NavLink to={`/employeeInfo/${employee._id}`}>
@@ -75,6 +112,62 @@ const EmployeeList = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+          <div className='bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-96'>
+            <h3 className='text-lg font-bold mb-4'>Pay Employee</h3>
+            <form onSubmit={handlePaymentSubmit}>
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-700'>
+                  Employee Name:
+                </label>
+                <p className='text-gray-600'>
+                  {selectedEmployee?.username || 'N/A'}
+                </p>
+              </div>
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-700'>
+                  Salary:
+                </label>
+                <p className='text-gray-600'>
+                  {selectedEmployee?.number || 'N/A'}
+                </p>
+              </div>
+              <div className='mb-4'>
+                <label className='block text-sm font-medium text-gray-700'>
+                  Select Payment Date:
+                </label>
+                <DatePicker
+                  selected={selectedDate}
+                  onChange={setSelectedDate}
+                  dateFormat='MMMM yyyy'
+                  showMonthYearPicker
+                  className='w-full px-3 py-2 border border-gray-300 rounded'
+                  placeholderText='Select month and year'
+                  required
+                />
+              </div>
+              <div className='mt-4 flex justify-between'>
+                <button
+                  type='button'
+                  onClick={handleCloseModal}
+                  className='bg-red-500 text-white px-4 py-2 rounded'
+                >
+                  Close
+                </button>
+                <button
+                  type='submit'
+                  className='bg-green-500 text-white px-4 py-2 rounded'
+                >
+                  Confirm Payment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -5,7 +5,11 @@ const EmployeeInfo = () => {
   const { id } = useParams();
   console.log(id);
 
-  return <div>This is EmployeeInfo. ID: {id}</div>;
+  return (
+    <div className='dark:text-lightSecondary text-darkSecondary'>
+      This is EmployeeInfo. ID: {id}
+    </div>
+  );
 };
 
 export default EmployeeInfo;

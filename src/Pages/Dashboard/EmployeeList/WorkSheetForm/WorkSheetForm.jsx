@@ -1,9 +1,9 @@
-import axios from 'axios';
 import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useForm } from 'react-hook-form';
 import useAuth from '../../../../Hooks/useAuth';
+import useAxiosPublic from '../../../../Hooks/useAxiosPublic';
 
 const WorkSheetForm = () => {
   const { user } = useAuth();
@@ -16,16 +16,14 @@ const WorkSheetForm = () => {
   } = useForm();
 
   const onSubmit = async data => {
+    const axiosPublic = useAxiosPublic();
     try {
       const payload = {
         ...data,
         email: user?.email,
+        userName: user?.displayName,
       };
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/employee-task-data`,
-        payload,
-      );
-      console.log(response.data);
+      await axiosPublic.post('/work-sheet', payload);
     } catch (error) {
       console.error('Error posting data:', error);
     }
@@ -54,6 +52,13 @@ const WorkSheetForm = () => {
       {errors.task && (
         <p className='text-red-500 text-xs'>{errors.task.message}</p>
       )}
+
+      <input
+        type='text'
+        {...register('userName')}
+        defaultValue={user?.displayName}
+        hidden
+      />
 
       {/* Hours Worked */}
       <input

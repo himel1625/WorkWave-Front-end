@@ -46,7 +46,6 @@ const Navbar = () => {
     isOpenButton(isOpen);
   };
 
-  // Function to toggle blank pop-up visibility
   const togglePopupVisibility = () => {
     setIsPopupVisible(prev => !prev);
   };
@@ -95,9 +94,11 @@ const Navbar = () => {
                 <p className='font-bold'>ContactUs</p>
               </NavLink>
 
-              <NavLink to='/login'>
-                <p className='font-bold'>login</p>
-              </NavLink>
+              <>
+                <NavLink to='/login'>
+                  <p className='font-bold'>Login</p>
+                </NavLink>
+              </>
             </div>
             <div className='hidden md:block'>
               <Theme />
@@ -190,9 +191,11 @@ const Navbar = () => {
                 <p className='font-bold'>ContactUs</p>
               </NavLink>
 
-              <NavLink to='/login'>
-                <p className='font-bold'>login</p>
-              </NavLink>
+              <>
+                <NavLink to='/login'>
+                  <p className='font-bold'>Login</p>
+                </NavLink>
+              </>
             </div>
             <div className='text-green-400'>
               <Theme />
