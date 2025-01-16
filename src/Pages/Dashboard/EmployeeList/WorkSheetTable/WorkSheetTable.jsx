@@ -66,7 +66,6 @@ const WorkSheetTable = () => {
   };
 
   const handleSave = async updatedData => {
-    console.log(updatedData._id);
     try {
       await axiosSecure.put(`/update/${updatedData._id}`, updatedData);
       queryClient.invalidateQueries(['E-T-Data']);
