@@ -36,15 +36,13 @@ const Login = () => {
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
   const onSubmit = async data => {
-    const { email, password, role } = data;
-    console.log(email, role);
+    const { email, password } = data;
     await saveUser(data);
 
     if (!email || !email.includes('@')) {
       toast.error('❌ Please provide a valid email');
       return;
     }
-
     if (password.length < 6) {
       toast.error('❌ Password must contain at least 6 characters');
       return;

@@ -1,19 +1,20 @@
 import React from 'react';
-import {
-  FaCog,
-  FaHistory,
-  FaHome,
-  FaSignOutAlt,
-  FaTasks,
-} from 'react-icons/fa';
+import { FaCog, FaSignOutAlt } from 'react-icons/fa';
 import { Link, NavLink } from 'react-router-dom';
 import logo from '../../../assets/WorkWave.png';
 import useAuth from '../../../hooks/useAuth';
 import useRole from '../../../Hooks/useRole';
+import LoadingSpinner from '../../LoadingSpinner/LoadingSpinner';
+import AdminMenu from '../Menu/AdminMenu/AdminMenu';
+import EmployeeMenu from '../Menu/Employeemenu/Employeemenu';
+import HRMenu from '../Menu/HRMenu/HRMenu';
 
 const Sidebar = () => {
   const [role, isLoading] = useRole();
+
   const { value, user } = useAuth();
+  if (isLoading) return <LoadingSpinner />;
+
   return (
     <div className='hidden md:block'>
       <div
@@ -58,6 +59,7 @@ const Sidebar = () => {
             alt='User Avatar'
           />
           <p className='font-bold pt-2'>{user?.displayName || 'User Name'}</p>
+          <p>{role}</p>
         </div>
 
         {/* Navigation Links */}
@@ -66,84 +68,10 @@ const Sidebar = () => {
             value ? 'px-6' : 'px-5'
           } transition-all`}
         >
-          {role && role === 'Employee' && (
-            <>
-              <Link
-                to='/workSheetForm'
-                className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'
-              >
-                <FaHome className='text-lg' />
-                {value && <span className='ml-4'>workSheetForm</span>}
-              </Link>
-              <Link
-                to='/workSheetTable'
-                className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'
-              >
-                <FaTasks className='text-lg' />
-                {value && <span className='ml-4'>Work Sheet</span>}
-              </Link>
-              <Link
-                to='/paymentHistoryTable'
-                className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'
-              >
-                <FaHistory className='text-lg' />
-                {value && <span className='ml-4'>Payment History</span>}
-              </Link>
-            </>
-          )}
-          {/* {role && role === 'Admin' && (
-            <>
-              <Link
-                to='/workSheetForm'
-                className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'
-              >
-                <FaHome className='text-lg' />
-                {value && <span className='ml-4'>workSheetForm</span>}
-              </Link>
-              <Link
-                to='/workSheetTable'
-                className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'
-              >
-                <FaTasks className='text-lg' />
-                {value && <span className='ml-4'>Work Sheet</span>}
-              </Link>
-              <Link
-                to='/paymentHistoryTable'
-                className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'
-              >
-                <FaHistory className='text-lg' />
-                {value && <span className='ml-4'>Payment History</span>}
-              </Link>
-            </>
-          )} */}
-          {/* {role && role === 'HR' && (
-            <>
-              <Link
-                to='/workSheetForm'
-                className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'
-              >
-                <FaHome className='text-lg' />
-                {value && <span className='ml-4'>workSheetForm</span>}
-              </Link>
-              <Link
-                to='/workSheetTable'
-                className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'
-              >
-                <FaTasks className='text-lg' />
-                {value && <span className='ml-4'>Work Sheet</span>}
-              </Link>
-              <Link
-                to='/paymentHistoryTable'
-                className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'
-              >
-                <FaHistory className='text-lg' />
-                {value && <span className='ml-4'>Payment History</span>}
-              </Link>
-            </>
-          )} */}
-          {/* Spacer */}
-          <div className='flex-grow'></div>
-          {/* Settings and Logout */}
+          {role && role === 'Admin' && <AdminMenu />}
+          {role && role === 'HR' && <HRMenu />}
+          {role && role === 'Employee' && <EmployeeMenu />}
+
           <Link
             to='/'
             className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'

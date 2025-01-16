@@ -11,12 +11,13 @@ export const imageUpload = async imageData => {
   return data.data.display_url;
 };
 
-export const saveUser = async user => {
-  console.log(user);
+export const saveUser = async userRole => {
   const axiosPublic = useAxiosPublic();
+
   try {
-    await axiosPublic.post(`/user/${user?.email}`, { role: user?.role });
-    console.log('User data sent successfully!');
+    await axiosPublic.post(`/user/${userRole?.email}`, {
+      role: userRole?.role,
+    });
   } catch (error) {
     console.error('Error saving user:', error);
   }

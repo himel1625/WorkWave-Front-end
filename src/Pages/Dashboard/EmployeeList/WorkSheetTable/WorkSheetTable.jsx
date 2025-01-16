@@ -41,7 +41,7 @@ const WorkSheetTable = () => {
     }).then(async result => {
       if (result.isConfirmed) {
         try {
-          await axiosPublic.delete(`/e-t-delete/${id}`);
+          await axiosPublic.delete(`/delete/${id}`);
           queryClient.invalidateQueries(['E-T-Data']);
           Swal.fire({
             title: 'Deleted!',

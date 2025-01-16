@@ -4,12 +4,17 @@ import ContactUs from '../Pages/ContactUs/ContactUs';
 import PaymentHistoryTable from '../Pages/Dashboard/EmployeeList/PaymentHistoryTable/PaymentHistoryTable';
 import WorkSheetForm from '../Pages/Dashboard/EmployeeList/WorkSheetForm/WorkSheetForm';
 import WorkSheetTable from '../Pages/Dashboard/EmployeeList/WorkSheetTable/WorkSheetTable';
+import EmployeeInfo from '../Pages/Dashboard/HR/EmployeeInfo/EmployeeInfo';
+import EmployeeList from '../Pages/Dashboard/HR/EmployeeList/EmployeeList';
+import WorkRecords from '../Pages/Dashboard/HR/WorkRecords/WorkRecords';
 import Error from '../Pages/Error/Error';
 import Home from '../Pages/Home/Home';
 import Login from '../Pages/Login/Login';
 import SignUp from '../Pages/SignUp/SignUp';
 import MainLayout from './../Layouts/MainLayout';
 import EmployeeRoute from './EmployeeRoute';
+import HrRoute from './HrRoute';
+import PrivateRoute from './PrivateRoute';
 
 const router = createBrowserRouter([
   {
@@ -31,7 +36,35 @@ const router = createBrowserRouter([
       },
       {
         path: '/contactUs',
-        element: <ContactUs />,
+        element: (
+          <PrivateRoute>
+            <ContactUs />,
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: '/employeeList',
+        element: (
+          <HrRoute>
+            <EmployeeList />
+          </HrRoute>
+        ),
+      },
+      {
+        path: '/employeeInfo/:id',
+        element: (
+          <HrRoute>
+            <EmployeeInfo />
+          </HrRoute>
+        ),
+      },
+      {
+        path: '/workRecords',
+        element: (
+          <HrRoute>
+            <WorkRecords />
+          </HrRoute>
+        ),
       },
       {
         path: '/workSheetForm',
