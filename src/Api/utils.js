@@ -13,11 +13,12 @@ export const imageUpload = async imageData => {
 
 export const saveUser = async userRole => {
   const axiosPublic = useAxiosPublic();
-
   try {
     await axiosPublic.post(`/user/${userRole?.email}`, {
       role: userRole?.role,
+      isVerified: userRole?.role === 'Employee' ? false : undefined,
     });
+    console.log('User data sent successfully');
   } catch (error) {
     console.error('Error saving user:', error);
   }

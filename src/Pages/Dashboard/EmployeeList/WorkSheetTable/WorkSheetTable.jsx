@@ -87,8 +87,8 @@ const WorkSheetTable = () => {
 
   return (
     <div className='overflow-x-auto dark:text-lightSecondary text-darkSecondary'>
-      <table className='min-w-full table-auto'>
-        <thead className=''>
+      <table className='min-w-full table-auto '>
+        <thead >
           <tr>
             <th className='px-4 py-2 border-b text-left'>Tasks</th>
             <th className='px-4 py-2 border-b text-left'>Hours Worked</th>
@@ -98,7 +98,7 @@ const WorkSheetTable = () => {
         </thead>
         <tbody>
           {data?.map((row, index) => (
-            <tr key={index}>
+            <tr key={index} >
               <td className='px-4 py-2 border-b'>{row.task}</td>
               <td className='px-4 py-2 border-b'>{row.hoursWorked}</td>
               <td className='px-4 py-2 border-b'>

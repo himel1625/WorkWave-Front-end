@@ -76,7 +76,7 @@ const WorkSheetForm = () => {
 
       {/* Date Picker */}
       <DatePicker
-        {...register('date')}
+        {...register('date', { required: 'Date is required' })}
         selected={new Date()}
         onChange={date => setValue('date', date)}
         dateFormat='yyyy-MM-dd'

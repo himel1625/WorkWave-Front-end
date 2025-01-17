@@ -71,7 +71,7 @@ const WorkRecords = () => {
           >
             <option value=''>Select Year</option>
             {Array.from(
-              { length: 50},
+              { length: 50 },
               (_, i) => new Date().getFullYear() - i,
             ).map(year => (
               <option key={year} value={year}>
@@ -82,11 +82,10 @@ const WorkRecords = () => {
         </div>
       </div>
 
-
-      <div className='overflow-x-auto'>
+      <div className='overflow-x-auto dark:text-lightSecondary text-darkSecondary'>
         <table className='min-w-full border-collapse border border-gray-300'>
           <thead>
-            <tr className='bg-gray-200'>
+            <tr>
               <th className='border border-gray-300 px-4 py-2'>Name</th>
               <th className='border border-gray-300 px-4 py-2'>Email</th>
               <th className='border border-gray-300 px-4 py-2'>Task</th>

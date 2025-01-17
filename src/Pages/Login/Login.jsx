@@ -36,9 +36,12 @@ const Login = () => {
   const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
 
   const onSubmit = async data => {
-    const { email, password } = data;
-    await saveUser(data);
-
+    const { email, password, role } = data;
+    const userData = {
+      ...data,
+      isVerified: role === 'Employee' ? false : undefined,
+    };
+    await saveUser(userData);
     if (!email || !email.includes('@')) {
       toast.error('❌ Please provide a valid email');
       return;

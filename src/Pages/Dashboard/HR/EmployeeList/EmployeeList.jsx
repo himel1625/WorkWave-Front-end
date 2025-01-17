@@ -1,26 +1,29 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import DatePicker from 'react-datepicker'; // Import DatePicker
-import 'react-datepicker/dist/react-datepicker.css'; // Import styles for DatePicker
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import toast from 'react-hot-toast';
 import { FaCreditCard, FaInfoCircle } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
 import useAxiosPublic from '../../../../Hooks/useAxiosPublic';
-
 const EmployeeList = () => {
   const axiosPublic = useAxiosPublic();
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null); // State to store selected date
+  const [selectedDate, setSelectedDate] = useState(null);
 
-  const { data: employees, isLoading } = useQuery({
+  const {
+    data: employees,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ['employee'],
     queryFn: async () => {
       const { data } = await axiosPublic.get('employee-list');
       return data;
     },
   });
-
   const handlePayClick = employee => {
     setSelectedEmployee(employee);
     setShowModal(true);
@@ -29,29 +32,38 @@ const EmployeeList = () => {
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedEmployee(null);
-    setSelectedDate(null); // Reset date on modal close
+    setSelectedDate(null);
   };
 
   const handlePaymentSubmit = e => {
     e.preventDefault();
 
     if (!selectedDate) {
-      alert('Please select a date');
+      toast.error('Please select a date');
       return;
     }
 
     const month = selectedDate.toLocaleString('default', { month: 'long' });
     const year = selectedDate.getFullYear();
 
-    // Here you can handle the payment logic, like sending data to the backend
     console.log(
       `Paid ${selectedEmployee.username} for ${month} ${year} - Salary: ${selectedEmployee.number}`,
     );
-
-    // Close the modal after submission
     handleCloseModal();
   };
 
+  const handleVerifyClick = async employee => {
+    try {
+      await axiosPublic.patch(`/employee-verify/${employee.email}`, {
+        isVerified: true,
+      });
+      toast.success(`${employee.username || 'Employee'} has been verified.`);
+      refetch();
+    } catch (error) {
+      console.error('Error updating verification:', error);
+      toast.error('Failed to verify the employee.');
+    }
+  };
   if (isLoading) return <LoadingSpinner />;
 
   return (
@@ -70,9 +82,10 @@ const EmployeeList = () => {
               <th className='border border-gray-300 px-4 py-2'>Details</th>
             </tr>
           </thead>
+
           <tbody>
             {employees?.map(employee => (
-              <tr key={employee._id}>
+              <tr key={employee._id} className='text-center'>
                 <td className='border border-gray-300 px-4 py-2'>
                   {employee.username || 'N/A'}
                 </td>
@@ -80,12 +93,18 @@ const EmployeeList = () => {
                   {employee.email}
                 </td>
                 <td className='border border-gray-300 px-4 py-2'>
-                  {!employee.verified ? (
-                    <span className='text-green-600 font-semibold'>✅</span>
+                  {employee.isVerified === false ? (
+                    <button
+                      onClick={() => handleVerifyClick(employee)}
+                      className='text-red-600 font-semibold'
+                    >
+                      ❌
+                    </button>
                   ) : (
-                    <span className='text-red-600 font-semibold'>❌</span>
+                    <span className='text-green-600 font-semibold'>✅</span>
                   )}
                 </td>
+
                 <td className='border border-gray-300 px-4 py-2'>
                   {employee.text || 'N/A'}
                 </td>
@@ -112,7 +131,6 @@ const EmployeeList = () => {
           </tbody>
         </table>
       </div>
-
       {/* Modal */}
       {showModal && (
         <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
