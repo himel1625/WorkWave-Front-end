@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useForm } from 'react-hook-form';
@@ -7,29 +7,44 @@ import useAxiosPublic from '../../../../Hooks/useAxiosPublic';
 
 const WorkSheetForm = () => {
   const { user } = useAuth();
+  const axiosPublic = useAxiosPublic();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm();
 
+  // State to handle date picker value
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  // Update date value in react-hook-form when the date picker changes
+  const handleDateChange = date => {
+    setSelectedDate(date);
+    setValue('date', date);
+  };
+
   const onSubmit = async data => {
-    const axiosPublic = useAxiosPublic();
     try {
       const payload = {
         ...data,
         email: user?.email,
         userName: user?.displayName,
+        date: selectedDate, // Ensure date is included properly
       };
+      console.log(payload);
       await axiosPublic.post('/work-sheet', payload);
+      reset({
+        task: '',
+        hoursWorked: '',
+        date: new Date(),
+      });
+      setSelectedDate(new Date());
     } catch (error) {
       console.error('Error posting data:', error);
     }
-    setValue('task', '');
-    setValue('hoursWorked', '');
-    setValue('date', new Date());
   };
 
   return (
@@ -37,6 +52,7 @@ const WorkSheetForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       className='flex flex-row items-center justify-center gap-4 p-4 bg-lightSecondary dark:bg-darkSecondary shadow-md rounded-lg'
     >
+      {/* Task Selection */}
       <select
         {...register('task', { required: 'Task is required' })}
         className='border border-gray-300 rounded-md px-3 py-2 w-40'
@@ -53,6 +69,7 @@ const WorkSheetForm = () => {
         <p className='text-red-500 text-xs'>{errors.task.message}</p>
       )}
 
+      {/* Hidden User Name Field */}
       <input
         type='text'
         {...register('userName')}
@@ -76,12 +93,14 @@ const WorkSheetForm = () => {
 
       {/* Date Picker */}
       <DatePicker
-        {...register('date', { required: 'Date is required' })}
-        selected={new Date()}
-        onChange={date => setValue('date', date)}
+        selected={selectedDate}
+        onChange={handleDateChange}
         dateFormat='yyyy-MM-dd'
         className='border border-gray-300 rounded-md px-3 py-2'
       />
+      {errors.date && (
+        <p className='text-red-500 text-xs'>{errors.date.message}</p>
+      )}
 
       {/* Submit Button */}
       <button
