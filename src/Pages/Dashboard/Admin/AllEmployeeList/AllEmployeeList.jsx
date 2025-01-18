@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FiUserPlus } from 'react-icons/fi';
+import Swal from 'sweetalert2';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
 import useAxiosPublic from '../../../../Hooks/useAxiosPublic';
 import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
@@ -39,6 +40,32 @@ const AllEmployeeList = () => {
   };
 
   if (isLoading) return <LoadingSpinner />;
+
+  const handleDelete = async email => {
+    await axiosSecure.delete(`/delete-users/${email}`);
+  };
+
+  const handleRoleUpdate = async email => {
+    await axiosSecure.put(`/update-role/${email}`);
+
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "This will change the user's role to HR. You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, change role!',
+    }).then(result => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Role Changed!',
+          text: 'The user role has been successfully updated to HR.',
+          icon: 'success',
+        });
+      }
+    });
+  };
 
   return (
     <div className='p-6 dark:text-lightSecondary text-darkSecondary'>
@@ -92,12 +119,18 @@ const AllEmployeeList = () => {
                       </button>
                     </td>
                     <td className='border border-gray-300 px-4 py-2'>
-                      <button className='text-red-500'>
+                      <button
+                        onClick={() => handleDelete(item.email)}
+                        className='text-red-500'
+                      >
                         <AiOutlineDelete />
                       </button>
                     </td>
                     <td className='border border-gray-300 px-4 py-2'>
-                      <button className='text-green-500'>
+                      <button
+                        onClick={() => handleRoleUpdate(item.email)}
+                        className='text-green-500'
+                      >
                         <FiUserPlus />
                       </button>
                     </td>
