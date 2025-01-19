@@ -1,67 +1,65 @@
-import React from 'react';
-import { FaPen, FaTrash } from 'react-icons/fa';
+import { useQuery } from '@tanstack/react-query';
+import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
+import useAuth from '../../../../hooks/useAuth';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 
 const PaymentHistoryTable = () => {
-  const paymentData = [
-    {
-      month: 'January',
-      year: '2025',
-      amount: 1000,
-      transactionId: 'TXN12345',
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
+  const { data: paymentHistory = [], isLoading } = useQuery({
+    queryKey: ['payroll', user?.email],
+    queryFn: async () => {
+      if (!user?.email) return [];
+      const { data } = await axiosSecure.get(`/payment-history/${user.email}`);
+      return data;
     },
-    {
-      month: 'February',
-      year: '2025',
-      amount: 1500,
-      transactionId: 'TXN12346',
-    },
-    {
-      month: 'March',
-      year: '2025',
-      amount: 2000,
-      transactionId: 'TXN12347',
-    },
-  ];
+  });
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className='overflow-x-auto dark:text-lightSecondary text-darkSecondary'>
-      <table className='min-w-full table-auto'>
-        <thead className=''>
-          <tr>
-            <th className='px-4 py-2 border-b text-left'>Month</th>
-            <th className='px-4 py-2 border-b text-left'>Year</th>
-            <th className='px-4 py-2 border-b text-left'>Amount</th>
-            <th className='px-4 py-2 border-b text-left'>Transaction ID</th>
-            <th className='px-4 py-2 border-b text-left'>Actions</th>
+      <table className='w-full table-auto border-collapse border bg-lightSecondary dark:bg-darkSecondary dark:text-lightSecondary text-darkSecondary border-gray-200 text-center'>
+        <thead>
+          <tr className=''>
+            <th className='border border-gray-300 px-4 py-2'>Month</th>
+            <th className='border border-gray-300 px-4 py-2'>Year</th>
+            <th className='border border-gray-300 px-4 py-2'>Amount</th>
+            <th className='border border-gray-300 px-4 py-2'>Transaction ID</th>
           </tr>
         </thead>
         <tbody>
-          {paymentData.map((payment, index) => (
-            <tr key={index}>
-              <td className='px-4 py-2 border-b'>{payment.month}</td>
-              <td className='px-4 py-2 border-b'>{payment.year}</td>
-              <td className='px-4 py-2 border-b'>{payment.amount}</td>
-              <td className='px-4 py-2 border-b'>{payment.transactionId}</td>
-              <td className='px-4 py-2 border-b'>
-                <div className='flex items-center gap-6'>
-                  <div>
-                    <button className='text-blue-500'>
-                      <FaPen />
-                    </button>
-                  </div>
-                  <div>
-                    <button className='text-red-500'>
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
+          {paymentHistory.length > 0 ? (
+            paymentHistory.map(payment => {
+              const paymentDate = new Date(payment.paymentDate);
+              const month = paymentDate.toLocaleString('default', {
+                month: 'long',
+              });
+              const year = paymentDate.getFullYear();
+              
+              return (
+                <tr key={payment._id}>
+                  <td className='border border-gray-300 px-4 py-2'>{month}</td>
+                  <td className='border border-gray-300 px-4 py-2'>{year}</td>
+                  <td className='border border-gray-300 px-4 py-2'>
+                    {payment.salary}
+                  </td>
+                  <td className='border border-gray-300 px-4 py-2'>
+                    {payment.transactionId}
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan='4' className='text-center py-6 text-gray-500'>
+                No payment history available.
               </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
-
-      {/* Pagination Section */}
     </div>
   );
 };

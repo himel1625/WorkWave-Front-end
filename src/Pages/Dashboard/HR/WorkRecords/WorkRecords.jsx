@@ -83,7 +83,7 @@ const WorkRecords = () => {
       </div>
 
       <div className='overflow-x-auto dark:text-lightSecondary text-darkSecondary'>
-        <table className='min-w-full border-collapse border border-gray-300'>
+        <table className='min-w-full border-collapse border bg-lightSecondary dark:bg-darkSecondary dark:text-lightSecondary text-darkSecondary  border-gray-300'>
           <thead>
             <tr>
               <th className='border border-gray-300 px-4 py-2'>Name</th>

@@ -89,24 +89,26 @@ const WorkSheetTable = () => {
 
   return (
     <div className='overflow-x-auto dark:text-lightSecondary text-darkSecondary'>
-      <table className='min-w-full table-auto '>
+      <table className='min-w-full table-auto bg-lightSecondary dark:bg-darkSecondary dark:text-lightSecondary text-darkSecondary  '>
         <thead>
           <tr>
-            <th className='px-4 py-2 border-b text-left'>Tasks</th>
-            <th className='px-4 py-2 border-b text-left'>Hours Worked</th>
-            <th className='px-4 py-2 border-b text-left'>Date</th>
-            <th className='px-4 py-2 border-b text-left'>Actions</th>
+            <th className='border border-gray-300 px-4 py-2'>Tasks</th>
+            <th className='border border-gray-300 px-4 py-2'>Hours Worked</th>
+            <th className='border border-gray-300 px-4 py-2'>Date</th>
+            <th className='border border-gray-300 px-4 py-2'>Actions</th>
           </tr>
         </thead>
         <tbody>
           {data?.map((row, index) => (
-            <tr key={index}>
-              <td className='px-4 py-2 border-b'>{row.task}</td>
-              <td className='px-4 py-2 border-b'>{row.hoursWorked}</td>
-              <td className='px-4 py-2 border-b'>
+            <tr key={index} className='text-center'>
+              <td className='border border-gray-300 px-4 py-2'>{row.task}</td>
+              <td className='border border-gray-300 px-4 py-2'>
+                {row.hoursWorked}
+              </td>
+              <td className='border border-gray-300 px-4 py-2'>
                 {new Date(row.date).toLocaleDateString()}
               </td>
-              <td className='px-4 py-2 border-b'>
+              <td className='border border-gray-300 px-4 py-2 flex items-center justify-center'>
                 <div className='flex gap-6'>
                   <button
                     onClick={() => handleUpdate(row)}
