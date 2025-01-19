@@ -16,52 +16,55 @@ const Sidebar = () => {
   if (isLoading) return <LoadingSpinner />;
 
   return (
-    <div className='hidden md:block'>
+    <div className={`mt-20 md:mt-0 ${value ? 'block ' : ' md:block'}`}>
       <div
         className={`flex flex-col h-screen bg-lightSecondary dark:bg-darkSecondary transition-all duration-700 ${
-          value ? 'w-60' : 'w-16'
+          value ? 'md:w-60 w-4' : 'md:w-16 w-2'
         }`}
       >
         {/* Logo Section */}
-        <NavLink to='/'>
+        <div className='hidden md:block'>
+          <NavLink to='/'>
+            <div
+              className={`flex ${
+                value
+                  ? 'items-center justify-center mt-5'
+                  : 'items-center justify-center mt-5'
+              }`}
+            >
+              <img
+                className={`transition-all duration-300 ${
+                  value ? 'w-7 h-7' : 'w-7 h-7'
+                }`}
+                src={logo}
+                alt='WorkWave Logo'
+              />
+              {value && (
+                <h1 className='text-xl font-bold ml-2 dark:text-lightSecondary text-darkSecondary'>
+                  WorkWave
+                </h1>
+              )}
+            </div>
+          </NavLink>
+        </div>
+
+        {/* User Profile Section */}
+        <div className='hidden md:block  mx-auto'>
           <div
-            className={`flex ${
-              value
-                ? 'items-center justify-center mt-5'
-                : 'items-center justify-center mt-5'
+            className={` mx-auto mt-10 dark:text-lightSecondary text-darkSecondary ${
+              value === false ? 'hidden' : 'block'
             }`}
           >
             <img
-              className={`transition-all duration-300 ${
-                value ? 'w-7 h-7' : 'w-7 h-7'
-              }`}
-              src={logo}
-              alt='WorkWave Logo'
+              className='w-20 h-20 rounded-lg object-cover'
+              referrerPolicy='no-referrer'
+              src={user?.photoURL || 'https://i.ibb.co/MVHh5Bd/man.jpg'}
+              alt='User Avatar'
             />
-            {value && (
-              <h1 className='text-xl font-bold ml-2 dark:text-lightSecondary text-darkSecondary'>
-                WorkWave
-              </h1>
-            )}
+            <p className='font-bold pt-2'>{user?.displayName || 'User Name'}</p>
+            <p>{role}</p>
           </div>
-        </NavLink>
-
-        {/* User Profile Section */}
-        <div
-          className={`mx-auto mt-10 dark:text-lightSecondary text-darkSecondary ${
-            value === false ? 'hidden' : 'block'
-          }`}
-        >
-          <img
-            className='w-20 h-20 rounded-lg object-cover'
-            referrerPolicy='no-referrer'
-            src={user?.photoURL || 'https://i.ibb.co/MVHh5Bd/man.jpg'}
-            alt='User Avatar'
-          />
-          <p className='font-bold pt-2'>{user?.displayName || 'User Name'}</p>
-          <p>{role}</p>
         </div>
-
         {/* Navigation Links */}
         <nav
           className={`flex flex-col mt-4 space-y-4 dark:text-lightSecondary text-darkSecondary ${

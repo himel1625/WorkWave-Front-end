@@ -1,18 +1,24 @@
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
+
 import 'react-datepicker/dist/react-datepicker.css';
 import toast from 'react-hot-toast';
 import { FaCreditCard, FaInfoCircle } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
+import CheckoutForm from '../../../../Components/From/CheckoutFrom';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
 import useAxiosPublic from '../../../../Hooks/useAxiosPublic';
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+
 const EmployeeList = () => {
   const axiosPublic = useAxiosPublic();
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-
+  console.log(selectedEmployee);
   const {
     data: employees,
     isLoading,
@@ -24,6 +30,7 @@ const EmployeeList = () => {
       return data;
     },
   });
+  // console.log(employees);
   const handlePayClick = employee => {
     setSelectedEmployee(employee);
     setShowModal(true);
@@ -34,21 +41,9 @@ const EmployeeList = () => {
     setSelectedEmployee(null);
     setSelectedDate(null);
   };
-
+  // console.log(selectedDate);
   const handlePaymentSubmit = e => {
     e.preventDefault();
-
-    if (!selectedDate) {
-      toast.error('Please select a date');
-      return;
-    }
-
-    const month = selectedDate.toLocaleString('default', { month: 'long' });
-    const year = selectedDate.getFullYear();
-
-    console.log(
-      `Paid ${selectedEmployee.username} for ${month} ${year} - Salary: ${selectedEmployee.number}`,
-    );
     handleCloseModal();
   };
 
@@ -114,11 +109,15 @@ const EmployeeList = () => {
                 <td className='border border-gray-300 px-4 py-2 flex items-center justify-center'>
                   <button
                     onClick={() => handlePayClick(employee)}
-                    className='text-green-600 hover:text-green-800'
+                    className={`text-green-600 hover:text-green-800 ${
+                      !employee.isVerified && 'opacity-50 cursor-not-allowed'
+                    }`}
+                    disabled={!employee.isVerified}
                   >
                     <FaCreditCard size={20} />
                   </button>
                 </td>
+
                 <td className='border border-gray-300 px-4 py-2 text-center'>
                   <NavLink to={`/employeeInfo/${employee._id}`}>
                     <button className='text-blue-600 hover:text-blue-800'>
@@ -132,29 +131,24 @@ const EmployeeList = () => {
         </table>
       </div>
       {/* Modal */}
+      {/* Modal */}
       {showModal && (
-        <div className='fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center'>
+        <div className='fixed inset-0 font-bold bg-black bg-opacity-50 flex justify-center items-center'>
           <div className='bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-96'>
             <h3 className='text-lg font-bold mb-4'>Pay Employee</h3>
             <form onSubmit={handlePaymentSubmit}>
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-700'>
+              <div className='mb-4 flex items-center gap-2'>
+                <label className='block text-sm font-medium'>
                   Employee Name:
                 </label>
-                <p className='text-gray-600'>
-                  {selectedEmployee?.username || 'N/A'}
-                </p>
+                <p>{selectedEmployee?.username || 'N/A'}</p>
+              </div>
+              <div className='mb-4 flex gap-2'>
+                <label className='block text-sm font-medium'>Salary:</label>
+                <p>{selectedEmployee?.number || 'N/A'}</p>
               </div>
               <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-700'>
-                  Salary:
-                </label>
-                <p className='text-gray-600'>
-                  {selectedEmployee?.number || 'N/A'}
-                </p>
-              </div>
-              <div className='mb-4'>
-                <label className='block text-sm font-medium text-gray-700'>
+                <label className='block text-sm font-medium'>
                   Select Payment Date:
                 </label>
                 <DatePicker
@@ -162,11 +156,22 @@ const EmployeeList = () => {
                   onChange={setSelectedDate}
                   dateFormat='MMMM yyyy'
                   showMonthYearPicker
-                  className='w-full px-3 py-2 border border-gray-300 rounded'
+                  className='w-full p-4 px-3 bg-lightSecondary dark:bg-darkSecondary py-2 border border-gray-300 rounded'
                   placeholderText='Select month and year'
                   required
                 />
               </div>
+
+              {/* Payment Gateway Input Fields */}
+              <div>
+                <Elements stripe={stripePromise}>
+                  <CheckoutForm
+                    selectedEmployee={selectedEmployee}
+                    selectedDate={selectedDate}
+                  />
+                </Elements>
+              </div>
+
               <div className='mt-4 flex justify-between'>
                 <button
                   type='button'

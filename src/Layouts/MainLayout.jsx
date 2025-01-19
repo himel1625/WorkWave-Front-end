@@ -21,8 +21,8 @@ const MainLayout = () => {
             <div
               className={`${
                 value
-                  ? 'mt-20  ml-64 transition-all duration-500'
-                  : 'mt-20  lg:ml-20 ml-2 transition-all duration-500 '
+                  ? 'mt-20  md:ml-64 ml-20  transition-all duration-500'
+                  : 'mt-20 ml-2 lg:ml-20 ml-20 transition-all duration-500 '
               } `}
             >
               <Outlet />

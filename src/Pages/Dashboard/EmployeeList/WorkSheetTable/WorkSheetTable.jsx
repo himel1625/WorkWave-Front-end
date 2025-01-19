@@ -16,7 +16,7 @@ const WorkSheetTable = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['E-T-Data', user?.email],
     enabled: !loading && !!user?.email,
     queryFn: async () => {
@@ -43,6 +43,7 @@ const WorkSheetTable = () => {
         try {
           await axiosPublic.delete(`/delete/${id}`);
           queryClient.invalidateQueries(['E-T-Data']);
+          refetch(); // Refetch data after delete
           Swal.fire({
             title: 'Deleted!',
             text: 'Your file has been deleted.',
@@ -69,6 +70,7 @@ const WorkSheetTable = () => {
     try {
       await axiosSecure.put(`/update/${updatedData._id}`, updatedData);
       queryClient.invalidateQueries(['E-T-Data']);
+      refetch(); // Refetch data after update
       setIsModalOpen(false);
       Swal.fire({
         title: 'Success!',
@@ -88,7 +90,7 @@ const WorkSheetTable = () => {
   return (
     <div className='overflow-x-auto dark:text-lightSecondary text-darkSecondary'>
       <table className='min-w-full table-auto '>
-        <thead >
+        <thead>
           <tr>
             <th className='px-4 py-2 border-b text-left'>Tasks</th>
             <th className='px-4 py-2 border-b text-left'>Hours Worked</th>
@@ -98,7 +100,7 @@ const WorkSheetTable = () => {
         </thead>
         <tbody>
           {data?.map((row, index) => (
-            <tr key={index} >
+            <tr key={index}>
               <td className='px-4 py-2 border-b'>{row.task}</td>
               <td className='px-4 py-2 border-b'>{row.hoursWorked}</td>
               <td className='px-4 py-2 border-b'>
