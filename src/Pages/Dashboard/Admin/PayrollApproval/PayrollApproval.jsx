@@ -13,15 +13,20 @@ const PayrollApproval = () => {
       return data;
     },
   });
+
   if (isLoading) return <LoadingSpinner />;
-  console.log(data.paymentDate);
+
   const handleIsPayment = async id => {
     const currentDate = new Date();
     const formattedDate = format(currentDate, 'yyyy-MM-dd');
-    await axiosSecure.put(`/update-payment-status/${id}`, {
-      currentDate: formattedDate,
-    });
-    refetch();
+    try {
+      await axiosSecure.put(`/update-payment-status/${id}`, {
+        currentDate: formattedDate,
+      });
+      refetch();
+    } catch (error) {
+      console.error('Error updating payment status:', error);
+    }
   };
 
   return (
@@ -41,42 +46,30 @@ const PayrollApproval = () => {
         </thead>
         <tbody>
           {data?.map(payroll => {
-            const formattedPaymentDate = format(
-              new Date(payroll.paymentDate),
-              'd, MMMM, yyyy',
-            );
-            const currentDate = format(
-              new Date(payroll.currentDate),
-              'd, MMMM, yyyy',
-            );
+            const formattedPaymentDate = payroll.paymentDate
+              ? format(new Date(payroll.paymentDate), 'MMMM, yyyy')
+              : 'N/A';
+            const currentDate = payroll.currentDate
+              ? format(new Date(payroll.currentDate), 'd, MMMM, yyyy')
+              : 'N/A';
             return (
               <tr key={payroll.transactionId}>
                 <td className='border border-gray-300 px-4 py-2'>
                   {payroll.employeeName}
                 </td>
-                <td className='border border-gray-300 px-4 '>
+                <td className='border border-gray-300 px-4'>
                   {payroll.designation}
                 </td>
-                <td className='border border-gray-300 px-4 '>
+                <td className='border border-gray-300 px-4'>
                   {formattedPaymentDate}
                 </td>
-                <td className='border border-gray-300 px-4  '>
+                <td className='border border-gray-300 px-4'>
                   {payroll.salary}
                 </td>
-                <td className='border border-gray-300 px-4  text-center'>
+                <td className='border border-gray-300 px-4 text-center'>
                   {payroll.transactionId}
                 </td>
-                <td className='border border-gray-300 px-4  text-center'>
-                  {/* <button
-                    onClick={() => handleIsPayment(payroll._id)}
-                    className={` text-white px-4 rounded${
-                      payroll.isPayment === true
-                        ? 'bg-blue-500 '
-                        : 'bg-green-500 '
-                    }`}
-                  >
-                    {payroll.isPayment ? 'Paid' : 'Pay'}
-                  </button> */}
+                <td className='border border-gray-300 px-4 text-center'>
                   <button
                     onClick={() => handleIsPayment(payroll._id)}
                     className={`text-white px-4 rounded ${
@@ -89,7 +82,7 @@ const PayrollApproval = () => {
                   </button>
                 </td>
                 <td className='border border-gray-300 px-4 py-2 text-center'>
-                  {currentDate || 'N/A'}
+                  {currentDate}
                 </td>
               </tr>
             );

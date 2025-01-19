@@ -14,6 +14,7 @@ const CheckoutForm = ({
   const stripe = useStripe();
   const elements = useElements();
 
+  // Fetch the payment intent client secret when employee and date are selected
   useEffect(() => {
     if (selectedEmployee && selectedDate) {
       getPaymentIntent();
@@ -36,10 +37,11 @@ const CheckoutForm = ({
   };
 
   const handleSubmit = async event => {
-    event.preventDefault();
+    event.preventDefault(); // Prevent default form submission behavior
     handlePaymentSubmit();
     setProcessing(true);
 
+    // Ensure Stripe and elements are available before proceeding
     if (!stripe || !elements) {
       setProcessing(false);
       return;
@@ -51,6 +53,7 @@ const CheckoutForm = ({
       return;
     }
 
+    // Create payment method
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card,
@@ -72,33 +75,37 @@ const CheckoutForm = ({
       console.error('Payment confirmation error:', confirmError);
       return;
     }
+
     console.log('Payment successful:', paymentIntent);
     setProcessing(false);
   };
 
   return (
     <div className='checkout-form'>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: '16px',
-              color: '#424770',
-              '::placeholder': { color: '#aab7c4' },
+      {/* Form to handle submission */}
+      <form onSubmit={handleSubmit}>
+        <CardElement
+          options={{
+            style: {
+              base: {
+                fontSize: '16px',
+                color: '#424770',
+                '::placeholder': { color: '#aab7c4' },
+              },
+              invalid: { color: '#9e2146' },
             },
-            invalid: { color: '#9e2146' },
-          },
-        }}
-      />
-      <div className='flex justify-around  gap-2'>
-        <button
-          className='bg-green-500 text-white px-4 py-2 rounded cursor-pointer'
-          onClick={handleSubmit}
-          disabled={processing || !clientSecret}
-        >
-          {processing ? 'Processing...' : 'Pay Now'}
-        </button>
-      </div>
+          }}
+        />
+        <div className='flex justify-around gap-2'>
+          <button
+            type='submit' 
+            className='bg-green-500 text-white px-4 py-2 rounded cursor-pointer'
+            disabled={processing || !clientSecret}
+          >
+            {processing ? 'Processing...' : 'Pay Now'}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

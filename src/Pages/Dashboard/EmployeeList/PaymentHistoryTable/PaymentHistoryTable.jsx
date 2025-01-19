@@ -37,7 +37,7 @@ const PaymentHistoryTable = () => {
                 month: 'long',
               });
               const year = paymentDate.getFullYear();
-              
+
               return (
                 <tr key={payment._id}>
                   <td className='border border-gray-300 px-4 py-2'>{month}</td>

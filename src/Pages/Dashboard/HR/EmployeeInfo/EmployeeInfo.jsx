@@ -1,45 +1,75 @@
-import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import {
-  ComposedChart,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  CartesianGrid,
   Area,
   Bar,
+  CartesianGrid,
+  ComposedChart,
+  Legend,
   Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from 'recharts';
+import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 
 const EmployeeInfo = () => {
+  const axiosSecure = useAxiosSecure();
   const { id } = useParams();
-  console.log(id);
 
-  const data = [
-    { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
-    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
-    { name: 'Page C', uv: 2000, pv: 9800, amt: 2290 },
-    { name: 'Page D', uv: 2780, pv: 3908, amt: 2000 },
-    { name: 'Page E', uv: 1890, pv: 4800, amt: 2181 },
-    { name: 'Page F', uv: 2390, pv: 3800, amt: 2500 },
-    { name: 'Page G', uv: 3490, pv: 4300, amt: 2100 },
-  ];
+  const { data: paymentData, isLoading } = useQuery({
+    queryKey: ['details'],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get(`/payment-history-details/${id}`);
+      return data;
+    },
+  });
 
+  if (isLoading) return <LoadingSpinner />;
+
+  const chartData = paymentData.map(entry => {
+    const paymentDate = new Date(entry.paymentDate);
+    const month = paymentDate.toLocaleString('default', { month: 'long' });
+    const year = paymentDate.getFullYear();
+
+    return {
+      name: `${month} ${year}`,
+      salary: parseInt(entry.salary),
+      designation: entry.designation,
+      employeeName: entry.employeeName,
+    };
+  });
   return (
     <div className='dark:text-lightSecondary text-darkSecondary flex items-center justify-center flex-col'>
-      <h1>This is EmployeeInfo. ID: {id}</h1>
-      <div className='mt-20'>
-        <ComposedChart width={900} height={450} data={data}>
-          <XAxis dataKey='name' />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <CartesianGrid stroke='#f5f5f5' />
-          <Area type='monotone' dataKey='amt' fill='#8884d8' stroke='#8884d8' />
-          <Bar dataKey='pv' barSize={20} fill='#413ea0' />
-          <Line type='monotone' dataKey='uv' stroke='#ff7300' />
-        </ComposedChart>
+      <p className='text-xl mt-2'>{`EmployeeName: ${chartData[0]?.employeeName}`}</p>
+      <p className='text-xl mt-2'>{`Designation: ${chartData[0]?.designation}`}</p>
+      <div className='mt-20 w-full px-4'>
+        <ResponsiveContainer width='100%' height={600}>
+          <ComposedChart data={chartData}>
+            <XAxis dataKey='name' />
+            <YAxis />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: '#1A202C',
+                color: '#E2E8F0',
+                borderRadius: '8px',
+              }}
+              cursor={{ fill: 'rgba(31, 41, 55, 0.1)' }}
+            />
+            <Legend />
+            <CartesianGrid stroke='#E2E8F0' />
+            <Area
+              type='monotone'
+              dataKey='salary'
+              fill='rgba(37, 99, 235, 0.2)'
+              stroke='#2563EB'
+            />
+            <Bar dataKey='salary' barSize={30} fill='#FBBF24' />
+            <Line type='monotone' dataKey='salary' stroke='#10B981' />
+          </ComposedChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
