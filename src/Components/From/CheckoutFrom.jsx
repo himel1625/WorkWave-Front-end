@@ -3,7 +3,11 @@ import { useEffect, useState } from 'react';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import './CheckoutForm.css';
 
-const CheckoutForm = ({ selectedEmployee, selectedDate }) => {
+const CheckoutForm = ({
+  selectedEmployee,
+  selectedDate,
+  handlePaymentSubmit,
+}) => {
   const [clientSecret, setClientSecret] = useState(null);
   const [processing, setProcessing] = useState(false);
   const axiosSecure = useAxiosSecure();
@@ -33,6 +37,7 @@ const CheckoutForm = ({ selectedEmployee, selectedDate }) => {
 
   const handleSubmit = async event => {
     event.preventDefault();
+    handlePaymentSubmit();
     setProcessing(true);
 
     if (!stripe || !elements) {
@@ -53,7 +58,8 @@ const CheckoutForm = ({ selectedEmployee, selectedDate }) => {
 
     if (error) {
       setProcessing(false);
-      return console.error('Payment method error:', error);
+      console.error('Payment method error:', error);
+      return;
     }
 
     const { error: confirmError, paymentIntent } =
@@ -63,15 +69,15 @@ const CheckoutForm = ({ selectedEmployee, selectedDate }) => {
 
     if (confirmError) {
       setProcessing(false);
-      return console.error('Payment confirmation error:', confirmError);
+      console.error('Payment confirmation error:', confirmError);
+      return;
     }
-
     console.log('Payment successful:', paymentIntent);
     setProcessing(false);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div className='checkout-form'>
       <CardElement
         options={{
           style: {
@@ -84,12 +90,16 @@ const CheckoutForm = ({ selectedEmployee, selectedDate }) => {
           },
         }}
       />
-      <div className='flex justify-around mt-2 gap-2'>
-        <button type='submit' disabled={processing || !clientSecret}>
+      <div className='flex justify-around  gap-2'>
+        <button
+          className='bg-green-500 text-white px-4 py-2 rounded cursor-pointer'
+          onClick={handleSubmit}
+          disabled={processing || !clientSecret}
+        >
           {processing ? 'Processing...' : 'Pay Now'}
         </button>
       </div>
-    </form>
+    </div>
   );
 };
 

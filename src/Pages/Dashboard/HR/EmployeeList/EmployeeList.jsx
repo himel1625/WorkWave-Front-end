@@ -11,6 +11,7 @@ import { NavLink } from 'react-router-dom';
 import CheckoutForm from '../../../../Components/From/CheckoutFrom';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
 import useAxiosPublic from '../../../../Hooks/useAxiosPublic';
+
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const EmployeeList = () => {
@@ -18,7 +19,7 @@ const EmployeeList = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  console.log(selectedEmployee);
+
   const {
     data: employees,
     isLoading,
@@ -30,7 +31,7 @@ const EmployeeList = () => {
       return data;
     },
   });
-  // console.log(employees);
+
   const handlePayClick = employee => {
     setSelectedEmployee(employee);
     setShowModal(true);
@@ -41,9 +42,9 @@ const EmployeeList = () => {
     setSelectedEmployee(null);
     setSelectedDate(null);
   };
-  // console.log(selectedDate);
-  const handlePaymentSubmit = e => {
-    e.preventDefault();
+
+  const handlePaymentSubmit = () => {
+    toast.success('Payment Request Successful');
     handleCloseModal();
   };
 
@@ -59,6 +60,7 @@ const EmployeeList = () => {
       toast.error('Failed to verify the employee.');
     }
   };
+
   if (isLoading) return <LoadingSpinner />;
 
   return (
@@ -130,13 +132,13 @@ const EmployeeList = () => {
           </tbody>
         </table>
       </div>
-      {/* Modal */}
+
       {/* Modal */}
       {showModal && (
         <div className='fixed inset-0 font-bold bg-black bg-opacity-50 flex justify-center items-center'>
           <div className='bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-96'>
             <h3 className='text-lg font-bold mb-4'>Pay Employee</h3>
-            <form onSubmit={handlePaymentSubmit}>
+            <div>
               <div className='mb-4 flex items-center gap-2'>
                 <label className='block text-sm font-medium'>
                   Employee Name:
@@ -168,10 +170,10 @@ const EmployeeList = () => {
                   <CheckoutForm
                     selectedEmployee={selectedEmployee}
                     selectedDate={selectedDate}
+                    handlePaymentSubmit={handlePaymentSubmit}
                   />
                 </Elements>
               </div>
-
               <div className='mt-4 flex justify-between'>
                 <button
                   type='button'
@@ -180,14 +182,8 @@ const EmployeeList = () => {
                 >
                   Close
                 </button>
-                <button
-                  type='submit'
-                  className='bg-green-500 text-white px-4 py-2 rounded'
-                >
-                  Confirm Payment
-                </button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
