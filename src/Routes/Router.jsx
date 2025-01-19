@@ -12,6 +12,7 @@ import WorkRecords from '../Pages/Dashboard/HR/WorkRecords/WorkRecords';
 import Error from '../Pages/Error/Error';
 import Home from '../Pages/Home/Home';
 import Login from '../Pages/Login/Login';
+import Setting from '../Pages/Setting/Setting';
 import SignUp from '../Pages/SignUp/SignUp';
 import MainLayout from './../Layouts/MainLayout';
 import AdminRoute from './AdminRoute';
@@ -36,6 +37,14 @@ const router = createBrowserRouter([
       {
         path: '/signup',
         element: <SignUp />,
+      },
+      {
+        path: '/setting',
+        element: (
+          <PrivateRoute>
+            <Setting />,
+          </PrivateRoute>
+        ),
       },
       {
         path: '/contactUs',

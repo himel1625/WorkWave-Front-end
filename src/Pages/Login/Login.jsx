@@ -56,6 +56,7 @@ const Login = () => {
     }
     if (!/[a-z]/.test(password)) {
       toast.error('❌ Password must contain at least one lowercase letter');
+      toast.error('Salary cannot be decreased!');
       return;
     }
 
@@ -176,8 +177,7 @@ const Login = () => {
                 id='role'
                 className='w-full px-4 py-3 border-2 border-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300'
               >
-                {/* <option value='Admin'>Admin</option> */}
-                <option value=''></option>
+                <option value='Admin'>Admin</option>
                 <option value='HR'>HR</option>
                 <option value='Employee'>Employee</option>
               </select>

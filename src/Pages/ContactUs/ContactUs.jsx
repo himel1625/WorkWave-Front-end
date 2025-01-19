@@ -1,6 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const ContactUs = () => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    // Handle form submission (e.g., send data to backend)
+    console.log('Email:', email);
+    console.log('Message:', message);
+    alert('Your message has been sent!');
+    setEmail('');
+    setMessage('');
+  };
+
   return (
     <div className='p-8 font-sans'>
       {/* Map Section */}
@@ -19,6 +32,49 @@ const ContactUs = () => {
             loading='lazy'
           ></iframe>
         </div>
+      </section>
+
+      {/* Contact Form Section */}
+      <section className='mt-8'>
+        <h2 className='text-2xl font-semibold text-gray-700 mb-4'>
+          Contact Us
+        </h2>
+        <form onSubmit={handleSubmit} className='space-y-4 '>
+          <div>
+            <label htmlFor='email' className='block text-gray-700'>
+              Email Address
+            </label>
+            <input
+              type='email'
+              id='email'
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              placeholder='Enter your email'
+              required
+              className='w-full p-3 border rounded-md bg-lightSecondary dark:bg-darkSecondary '
+            />
+          </div>
+          <div>
+            <label htmlFor='message' className='block text-gray-700'>
+              Your Message
+            </label>
+            <textarea
+              id='message'
+              value={message}
+              onChange={e => setMessage(e.target.value)}
+              placeholder='Enter your message'
+              required
+              className='w-full p-3 border rounded-md bg-lightSecondary dark:bg-darkSecondary'
+              rows='4'
+            />
+          </div>
+          <button
+            type='submit'
+            className='w-full p-3 bg-blue-500 text-white rounded-md hover:bg-blue-600'
+          >
+            Send Message
+          </button>
+        </form>
       </section>
     </div>
   );

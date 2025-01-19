@@ -5,11 +5,13 @@ import Swal from 'sweetalert2';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
 import useAxiosPublic from '../../../../Hooks/useAxiosPublic';
 import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
+
 const AllEmployeeList = () => {
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [newSalary, setNewSalary] = useState('');
+  console.log(selectedEmployee?.number);
 
   const {
     data: AllEmployees,
@@ -24,6 +26,16 @@ const AllEmployeeList = () => {
   });
 
   const handleSalaryAdjust = async () => {
+    if (parseInt(newSalary) < parseInt(selectedEmployee.number)) {
+      Swal.fire({
+        title: 'Invalid Salary',
+        text: 'New salary cannot be less than the current salary.',
+        icon: 'error',
+        confirmButtonText: 'Ok',
+      });
+      return;
+    }
+
     try {
       await axiosSecure.patch('/up-date-Salary', {
         id: selectedEmployee?._id,
@@ -39,7 +51,7 @@ const AllEmployeeList = () => {
 
   if (isLoading) return <LoadingSpinner />;
 
-  const handleDelete = async (email, refetch) => {
+  const handleDelete = async email => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -69,7 +81,7 @@ const AllEmployeeList = () => {
     });
   };
 
-  const handleRoleUpdate = async (email, refetch) => {
+  const handleRoleUpdate = async email => {
     try {
       await axiosSecure.put(`/update-role/${email}`);
       Swal.fire({
@@ -103,7 +115,7 @@ const AllEmployeeList = () => {
     <div className='p-6 dark:text-lightSecondary text-darkSecondary'>
       <h2 className='text-xl font-bold mb-4'>All Employee List</h2>
       <div className='overflow-x-auto'>
-        <table className='table-auto w-full bg-lightSecondary dark:bg-darkSecondary dark:text-lightSecondary text-darkSecondary  border-collapse border border-gray-300'>
+        <table className='table-auto w-full bg-lightSecondary dark:bg-darkSecondary dark:text-lightSecondary text-darkSecondary border-collapse border border-gray-300'>
           <thead>
             <tr>
               <th className='border border-gray-300 px-4 py-2'>Name</th>
@@ -187,6 +199,7 @@ const AllEmployeeList = () => {
               type='number'
               placeholder='Enter new salary'
               value={newSalary}
+              defaultValue={parseInt(selectedEmployee.number)}
               onChange={e => setNewSalary(e.target.value)}
               className='w-full p-2 border rounded mb-4 bg-lightSecondary dark:bg-darkSecondary'
             />
@@ -210,5 +223,4 @@ const AllEmployeeList = () => {
     </div>
   );
 };
-
 export default AllEmployeeList;

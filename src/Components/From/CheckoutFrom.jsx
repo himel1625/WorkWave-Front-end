@@ -82,7 +82,6 @@ const CheckoutForm = ({
 
   return (
     <div className='checkout-form'>
-      {/* Form to handle submission */}
       <form onSubmit={handleSubmit}>
         <CardElement
           options={{
@@ -95,10 +94,11 @@ const CheckoutForm = ({
               invalid: { color: '#9e2146' },
             },
           }}
+          required
         />
         <div className='flex justify-around gap-2'>
           <button
-            type='submit' 
+            type='submit'
             className='bg-green-500 text-white px-4 py-2 rounded cursor-pointer'
             disabled={processing || !clientSecret}
           >

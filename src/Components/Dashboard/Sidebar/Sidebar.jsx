@@ -76,7 +76,7 @@ const Sidebar = () => {
           {role && role === 'Employee' && <EmployeeMenu />}
 
           <Link
-            to='/'
+            to='/setting'
             className='flex items-center py-2 hover:bg-gray-700 transition-colors rounded-lg'
           >
             <FaCog className='text-lg' />
