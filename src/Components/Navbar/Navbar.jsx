@@ -167,9 +167,11 @@ const Navbar = () => {
                   size={20}
                   className='text-darkSecondary dark:text-lightSecondary'
                 />
-                <p className='text-darkSecondary dark:text-lightSecondary font-bold'>
-                  Settings
-                </p>
+                <NavLink to='/setting'>
+                  <p className='text-darkSecondary dark:text-lightSecondary font-bold'>
+                    Settings
+                  </p>
+                </NavLink>
               </div>
               <div onClick={() => logOut()} className='flex items-center gap-2'>
                 <MdLogout

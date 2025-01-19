@@ -33,7 +33,7 @@ const Home = () => {
               Building powerful mobile apps that enhance user experience.
             </p>
           </div>
-          <div className='dark:bg-darkPrimaryp-6 rounded-lg shadow-md'>
+          <div className='dark:bg-darkPrimary p-6 rounded-lg shadow-md'>
             <h3 className='text-2xl font-semibold text-darkSecondary dark:text-lightSecondary'>
               Digital Marketing
             </h3>
@@ -63,8 +63,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Additional Sections */}
-      {/* Section 1: About Us */}
+      {/* About Us Section */}
       <section className='py-16 px-4 bg-lightSecondary dark:bg-darkSecondary'>
         <h2 className='text-3xl font-semibold text-center text-darkSecondary dark:text-lightSecondary'>
           About Us
@@ -75,7 +74,7 @@ const Home = () => {
         </p>
       </section>
 
-      {/* Section 2: Contact Us */}
+      {/* Contact Us Section */}
       <section className='py-16 px-4 bg-lightSecondary dark:bg-darkSecondary text-darkSecondary dark:text-lightSecondary'>
         <h2 className='text-3xl font-semibold text-center'>Get in Touch</h2>
         <div className='mt-8 flex justify-center'>
