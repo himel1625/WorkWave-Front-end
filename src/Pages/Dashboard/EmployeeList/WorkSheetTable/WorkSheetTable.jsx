@@ -4,12 +4,10 @@ import { FaPen, FaTrash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
 import useAuth from '../../../../Hooks/useAuth';
-import useAxiosPublic from '../../../../Hooks/useAxiosPublic';
 import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
 
 const WorkSheetTable = () => {
   const axiosSecure = useAxiosSecure();
-  const axiosPublic = useAxiosPublic();
   const { user, loading } = useAuth();
   const queryClient = useQueryClient();
 
@@ -41,9 +39,9 @@ const WorkSheetTable = () => {
     }).then(async result => {
       if (result.isConfirmed) {
         try {
-          await axiosPublic.delete(`/delete/${id}`);
+          await axiosSecure.delete(`/delete/${id}`);
           queryClient.invalidateQueries(['E-T-Data']);
-          refetch(); // Refetch data after delete
+          refetch(); 
           Swal.fire({
             title: 'Deleted!',
             text: 'Your file has been deleted.',

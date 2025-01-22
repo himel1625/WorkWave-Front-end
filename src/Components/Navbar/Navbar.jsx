@@ -82,7 +82,7 @@ const Navbar = () => {
                     )}
                   </div>
                 </NavLink>
-                <div className='pl-10'>
+                <div className='pl-10 '>
                   <FaBars size={25} onClick={toggleSidebar} />
                 </div>
               </div>
@@ -93,12 +93,11 @@ const Navbar = () => {
               <NavLink to='/contactUs'>
                 <p className='font-bold'>ContactUs</p>
               </NavLink>
-
-              <>
+              {!user?.email ? (
                 <NavLink to='/login'>
                   <p className='font-bold'>Login</p>
                 </NavLink>
-              </>
+              ) : null}
             </div>
             <div className='hidden md:block'>
               <Theme />
@@ -192,12 +191,11 @@ const Navbar = () => {
               <NavLink to='/contactUs'>
                 <p className='font-bold'>ContactUs</p>
               </NavLink>
-
-              <>
+              {!user?.email ? (
                 <NavLink to='/login'>
                   <p className='font-bold'>Login</p>
                 </NavLink>
-              </>
+              ) : null}
             </div>
             <div className='text-green-400'>
               <Theme />

@@ -42,10 +42,7 @@ const Login = () => {
       isVerified: role === 'Employee' ? false : undefined,
     };
     await saveUser(userData);
-    if (!email || !email.includes('@')) {
-      toast.error('❌ Please provide a valid email');
-      return;
-    }
+
     if (password.length < 6) {
       toast.error('❌ Password must contain at least 6 characters');
       return;

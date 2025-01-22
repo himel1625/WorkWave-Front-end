@@ -10,12 +10,12 @@ import { FaCreditCard, FaInfoCircle } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import CheckoutForm from '../../../../Components/From/CheckoutFrom';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
-import useAxiosPublic from '../../../../Hooks/useAxiosPublic';
+import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const EmployeeList = () => {
-  const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -27,7 +27,7 @@ const EmployeeList = () => {
   } = useQuery({
     queryKey: ['employee'],
     queryFn: async () => {
-      const { data } = await axiosPublic.get('employee-list');
+      const { data } = await axiosSecure.get('employee-list');
       return data;
     },
   });
@@ -50,7 +50,7 @@ const EmployeeList = () => {
 
   const handleVerifyClick = async employee => {
     try {
-      await axiosPublic.patch(`/employee-verify/${employee.email}`, {
+      await axiosSecure.patch(`/employee-verify/${employee.email}`, {
         isVerified: true,
       });
       toast.success(`${employee.username || 'Employee'} has been verified.`);

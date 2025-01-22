@@ -12,6 +12,7 @@ export const imageUpload = async imageData => {
 };
 
 export const saveUser = async userRole => {
+  console.log(userRole)
   const axiosPublic = useAxiosPublic();
   try {
     await axiosPublic.post(`/user/${userRole?.email}`, {

@@ -63,6 +63,7 @@ const AuthProvider = ({ children }) => {
       return unsubscribe();
     };
   }, []);
+
   const [value, setValue] = useState(false);
   const isOpenButton = btn => {
     setValue(btn);

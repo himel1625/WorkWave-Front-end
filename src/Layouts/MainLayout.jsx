@@ -9,7 +9,7 @@ const MainLayout = () => {
 
   return (
     <div>
-      <div className='bg-lightPrimary  dark:bg-darkPrimary font-Roboto  mx-auto md:mx-auto scroll-smooth   '>
+      <div className=' bg-lightPrimary  dark:bg-darkPrimary font-Roboto  mx-auto md:mx-auto scroll-smooth   '>
         <div className='flex'>
           <div className='fixed top-0 h-[90%]'>
             <Sidebar />

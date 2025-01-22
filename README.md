@@ -28,9 +28,9 @@ This is the front-end of the Employee Management system, built using **React** a
 
 ### Prerequisites
 - Node.js (version >= 16.0.0)
-- NPM (or Yarn)
+- NPM
 
-### Steps
+<!-- ### Steps
 1. Clone the repository
    ```bash
-   git clone https://github.com/your-username/employee-management-frontend.git
+   git clone https://github.com/your-username/employee-management-frontend.git -->

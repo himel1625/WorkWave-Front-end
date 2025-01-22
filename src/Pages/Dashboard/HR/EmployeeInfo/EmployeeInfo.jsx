@@ -13,7 +13,7 @@ import {
   YAxis,
 } from 'recharts';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
-import useAxiosSecure from '../../../../hooks/useAxiosSecure';
+import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
 
 const EmployeeInfo = () => {
   const axiosSecure = useAxiosSecure();

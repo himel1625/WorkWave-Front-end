@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns'; // Import date-fns format function
 import React from 'react';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
-import useAxiosSecure from '../../../../hooks/useAxiosSecure';
+import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
 
 const PayrollApproval = () => {
   const axiosSecure = useAxiosSecure();
@@ -13,7 +13,6 @@ const PayrollApproval = () => {
       return data;
     },
   });
-
   if (isLoading) return <LoadingSpinner />;
 
   const handleIsPayment = async id => {
@@ -72,9 +71,10 @@ const PayrollApproval = () => {
                 <td className='border border-gray-300 px-4 text-center'>
                   <button
                     onClick={() => handleIsPayment(payroll._id)}
+                    disabled={payroll.isPayment === true}
                     className={`text-white px-4 rounded ${
                       payroll.isPayment === true
-                        ? 'bg-blue-500'
+                        ? 'bg-blue-500 cursor-not-allowed'
                         : 'bg-green-500'
                     }`}
                   >

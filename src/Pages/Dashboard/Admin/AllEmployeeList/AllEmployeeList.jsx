@@ -11,7 +11,6 @@ const AllEmployeeList = () => {
   const axiosSecure = useAxiosSecure();
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [newSalary, setNewSalary] = useState('');
-  console.log(selectedEmployee?.number);
 
   const {
     data: AllEmployees,
@@ -37,7 +36,7 @@ const AllEmployeeList = () => {
     }
 
     try {
-      await axiosSecure.patch('/up-date-Salary', {
+      await axiosPublic.patch('/up-date-Salary', {
         id: selectedEmployee?._id,
         salary: newSalary,
       });

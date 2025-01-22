@@ -1,6 +1,6 @@
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useEffect, useState } from 'react';
-import useAxiosSecure from '../../hooks/useAxiosSecure';
+import useAxiosPublic from '../../Hooks/useAxiosPublic';
 import './CheckoutForm.css';
 
 const CheckoutForm = ({
@@ -10,7 +10,7 @@ const CheckoutForm = ({
 }) => {
   const [clientSecret, setClientSecret] = useState(null);
   const [processing, setProcessing] = useState(false);
-  const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
   const stripe = useStripe();
   const elements = useElements();
 
@@ -23,7 +23,7 @@ const CheckoutForm = ({
 
   const getPaymentIntent = async () => {
     try {
-      const { data } = await axiosSecure.post('/create-payment-intent', {
+      const { data } = await axiosPublic.post('/create-payment-intent', {
         email: selectedEmployee?.email,
         employeeName: selectedEmployee?.username,
         salary: selectedEmployee?.number,

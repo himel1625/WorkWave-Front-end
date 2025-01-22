@@ -6,10 +6,6 @@ const ContactUs = () => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    // Handle form submission (e.g., send data to backend)
-    console.log('Email:', email);
-    console.log('Message:', message);
-    alert('Your message has been sent!');
     setEmail('');
     setMessage('');
   };

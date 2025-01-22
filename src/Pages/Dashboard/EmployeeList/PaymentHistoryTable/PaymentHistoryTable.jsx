@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import LoadingSpinner from '../../../../Components/LoadingSpinner/LoadingSpinner';
 import useAuth from '../../../../hooks/useAuth';
-import useAxiosSecure from '../../../../hooks/useAxiosSecure';
+import useAxiosSecure from '../../../../Hooks/useAxiosSecure';
 
 const PaymentHistoryTable = () => {
   const { user } = useAuth();
