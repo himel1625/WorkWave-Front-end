@@ -9,6 +9,9 @@ The application allows employees to manage their tasks and payroll, HR to monito
 Admin to oversee the entire platform. The front-end interacts with the backend to display dynamic
 data, such as employee tasks, payments, and user authentication.
 
+## Live Demo  
+[View Project](https://login-with-eddbb.web.app)
+
 ## Features
 
 -  **Responsive Design**: Mobile, tablet, and desktop views.
